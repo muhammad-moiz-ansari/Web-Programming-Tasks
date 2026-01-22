@@ -7,12 +7,28 @@
     <meta name="description" content="A simple online art gallery showcasing creative works, paintings, and exhibitions.">
     <meta name="keywords" content="art gallery, artwork, creative, portfolio, student project">
     <meta name="author" content="Your Name">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
 
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        section {
+            scroll-margin-top: 96px;
+        }
         body {
             background-color: #04022b;
             color: white;
             overflow-x: hidden;
+            margin: 0px;
+        }
+        h1, h2, p {
+            
+            margin-left: 10px;
+        }
+        p{
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 16px;
         }
         h1 {
             color: #a6e6ff;
@@ -38,27 +54,112 @@
             font-size: 18px;
             margin: 5px 0;
         }
-
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0px;
+            padding: 15px;
+            background-color: #a6e6ff;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 12px;
+            margin: 0px;
+            padding: 0px;
+        }
+        .nav-links li a {
+            text-decoration: none;
+            color: #04022b;
+            font-weight: 550;
+            font-size: 17px;
+            transition: all 0.3s ease;
+        }
+        .nav-links li a:hover {
+            color: #2a698d;
+        }
+        .nav-links li a :active {
+            color: #bebebe;
+        }
+        .logo {
+            font-family: pacifico, cursive;
+            padding: 0px;
+            margin: 0px;
+            font-size: 30px;
+            font-weight: 400;
+            color: #04022b;
+            cursor: default;
+        }
+        .contact-form {
+            margin: 10px;
+            padding: 10px;
+            border: 3px ridge #dff8ff;
+            border-radius: 6px;
+            /*width: 400px;*/
+        }
+        .contact-item p {
+            margin: 0px 0px 10px 0px;
+            padding: 0px;
+            font-size: 18px;
+        }
+        .contact-form input, .contact-form textarea, .contact-form button {
+            background-color: #1f1f27;
+            color: #ffffff;
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        ::placeholder {
+            color: #b2b2b2d7;
+        }
+        .contact-form button {
+            background-color: #2f5ad1;
+            color: #ffffff;
+            border-style: none;
+            transition: all 0.3s ease;
+        }
+        .contact-form button:hover {
+            background-color: #1d3d96;
+        }
+        .footer {
+            background-color: #a6e6ff;
+            color: #04022b;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
     </style>
     </head>
 
     <body>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="#feedback">Feedback</a></li>
-        </ul>
+        <div class="navbar">
+            <p class="logo">Catalley</p>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+
         <section id="home">
-            <h1>Art Gallery</h1>
-            <h2>Cats ONLY 😺</h2>
-            <p>Welcome to cats art gallery.</p>
+            <h1>The Catalley Collection</h1>
+            <h2>Where Art Has Whiskers 🐾</h2>
+            <p>Step into a world of feline masterpieces. From chaotic energy to serene loafing, we curate the finest moments of cat culture.</p>
         </section>
         
         <section id="about">
-            <h2>About Us</h2>
-            <p>This gallery showcases a collection of cat images, celebrating the beauty and diversity of our feline friends.</p>
+            <h2>Behind the Whiskers</h2>
+            <p>Catalley was born from a simple truth: cats are the internet's greatest muse. This gallery is a student-curated sanctuary dedicated to capturing the elegance, silliness, and undeniable attitude of our feline friends. We don't just display pictures; we celebrate the "purr-sonality" of every subject.</p>
         </section>
 
         <section id="gallery">
@@ -90,5 +191,33 @@
                 </div>
             </div>
         </section>
+
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <div class="contact-form">
+                <form>
+                    <div class="contact-item">
+                        <p>Name:</p>
+                        <input type="text" name="name" placeholder="Your Name" required><br><br>
+                    </div>
+                    <div class="contact-item">
+                        <p>Email:</p>
+                        <input type="email" name="email" placeholder="e.g. domain@gmail.com" required><br><br>
+                    </div>
+                    <div class="contact-item">
+                        <p>Message:</p>
+                        <textarea placeholder="Write message here"></textarea>
+                    </div>
+                    <br>
+                    <div class="contact-item">
+                        <button type="submit">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <div class="footer">
+            <p>&copy; 2026 Catalley Art Gallery. All rights reserved.</p>
+        </div>
     </body>
 </html>
