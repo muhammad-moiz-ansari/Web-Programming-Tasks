@@ -1,0 +1,156 @@
+        html {
+            scroll-behavior: smooth;
+        }
+        section {
+            scroll-margin-top: 96px;
+        }
+        body {
+            background-color: #04022b;
+            color: white;
+            overflow-x: hidden;
+            margin: 0px;
+        }
+        h1, h2, p {
+            margin-left: 10px;
+        }
+        h1, h2 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        p, a, input, textarea, button {
+            font-family: 'Quicksand', sans-serif;
+        }
+        p{
+            font-size: 16px;
+        }
+        h1 {
+            color: #a6e6ff;
+        }
+        h2 {
+            color: #cff1ff;
+        }
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            width: 100vw;
+            padding: 0px;
+            margin: 10px;
+            border: 0px solid black;
+        }
+        .pics .image {
+            width: 225px;
+            height: 225px;
+        }
+        .pics p {
+            text-align: center;
+            font-size: 18px;
+            margin: 5px 0;
+        }
+        .pics:hover {
+            transform: scale(1.03);
+            transition: all 0.3s ease;
+        }
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0px;
+            padding: 15px;
+            background-color: #a6e6ff;
+        }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 12px;
+            margin: 0px;
+            padding: 0px;
+        }
+        .nav-links li a {
+            text-decoration: none;
+            color: #04022b;
+            font-weight: 550;
+            font-size: 17px;
+            transition: all 0.3s ease;
+        }
+        .nav-links li a:hover {
+            color: #2a698d;
+        }
+        .nav-links li a :active {
+            color: #bebebe;
+        }
+        .logo {
+            font-family: pacifico, cursive;
+            padding: 0px;
+            margin: 0px;
+            font-size: 30px;
+            font-weight: 400;
+            color: #04022b;
+            cursor: default;
+        }
+        .contact-form {
+            margin: 10px;
+            padding: 10px;
+            border: 3px ridge #dff8ff;
+            border-radius: 6px;
+        }
+        .contact-item p {
+            margin: 0px 0px 10px 0px;
+            padding: 0px;
+            font-size: 18px;
+        }
+        .contact-form input, .contact-form textarea, .contact-form button {
+            background-color: #1f1f27;
+            color: #ffffff;
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .contact-item input:focus, .contact-item textarea:focus {
+            border-color: #a6e6ff;
+        }
+        ::placeholder {
+            color: #b2b2b2d7;
+            font-style: italic;
+        }
+        .contact-form button {
+            background-color: #2f5ad1;
+            color: #ffffff;
+            border-style: none;
+            transition: all 0.3s ease;
+        }
+        .contact-form button:hover {
+            background-color: #1d3d96;
+        }
+        footer {
+            background-color: #a6e6ff;
+            color: #04022b;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        @media only screen and (max-width: 693px) {
+            .h1, h2 {
+                text-align: center;
+            }
+        }
+        @media only screen and (max-width: 459px) {
+            .nav-links {
+                gap: 10px;
+            }
+            nav {
+                flex-direction: column;
+            }
+            section {
+                scroll-margin-top: 115px;
+            }
+        }
