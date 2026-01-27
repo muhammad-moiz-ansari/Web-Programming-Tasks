@@ -17,7 +17,7 @@
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
         }
-        p, a, input, textarea, button {
+        label, p, a, input, textarea, button {
             font-family: 'Quicksand', sans-serif;
         }
         p{
@@ -84,6 +84,22 @@
         .nav-links li a :active {
             color: #bebebe;
         }
+        .auth-btn {
+            padding: 6px 12px;
+            border: 2px solid #04022b;
+            border-radius: 18px;
+            background-color: transparent;
+        }
+        .auth-btn.signup {
+            background-color: #04022b;
+            color: #a6e6ff;
+        }
+        .auth-btn:hover {
+            background-color: #2a698d;
+            border-color: #2a698d;
+            color: white !important;
+            text-decoration: none;
+        }
         .logo {
             font-family: pacifico, cursive;
             padding: 0px;
@@ -99,7 +115,7 @@
             border: 3px ridge #dff8ff;
             border-radius: 6px;
         }
-        .contact-item p {
+        .contact-item p, .signin-item label {
             margin: 0px 0px 10px 0px;
             padding: 0px;
             font-size: 18px;
@@ -116,7 +132,7 @@
             font-size: 16px;
             transition: border 0.5s ease, background-color 0.3s ease;
         }
-        .contact-item input:focus, .contact-item textarea:focus {
+        .contact-item input:focus, .contact-item textarea:focus, .signin-form input:focus {
             border-color: #a6e6ff;
         }
         .contact-form textarea {
@@ -133,7 +149,7 @@
             border-style: none;
             transition: all 0.3s ease;
         }
-        .contact-form button:hover {
+        .contact-form button:hover, .signin-form button:hover {
             background-color: #1d3d96;
         }
         footer {
@@ -144,6 +160,53 @@
             margin-top: 20px;
             font-size: 16px;
         }
+
+        /* sign in section */
+        #sign-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        #signin-section {
+            width: 500px;
+            padding: 20px;
+            margin: 20px;
+            background-color: #083950;
+            border-radius: 8px;
+            max-width: 612px;
+        }
+        .signin-form {
+            margin: 10px;
+            padding: 12px;
+            border: 3px ridge #dff8ff;
+            border-radius: 6px;
+        }
+        .signin-item {
+            margin: 0px 0px 10px 0px;
+            padding: 0px;
+            font-size: 18px;
+        }
+        .signin-form input, .signin-form button {
+            background-color: #1f1f27;
+            color: #ffffff;
+            width: 100%;
+            padding: 6px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border 0.5s ease, background-color 0.3s ease;
+        }
+
+        .signin-form button {
+            background-color: #2f5ad1;
+            color: #ffffff;
+            border-style: none;
+            transition: all 0.3s ease;
+        }
+
+        /* Responsive Design */
         @media only screen and (max-width: 693px) {
             .h1, h2 {
                 text-align: center;
