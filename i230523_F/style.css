@@ -103,7 +103,6 @@
             margin: 0px 0px 10px 0px;
             padding: 0px;
             font-size: 18px;
-            width: fixed;
         }
         .contact-form input, .contact-form textarea, .contact-form button {
             background-color: #1f1f27;
@@ -114,14 +113,9 @@
             border-radius: 4px;
             box-sizing: border-box;
             font-size: 16px;
-            transition: border 0.5s ease, background-color 0.3s ease;
         }
         .contact-item input:focus, .contact-item textarea:focus {
             border-color: #a6e6ff;
-        }
-        .contact-form textarea {
-            resize: vertical;
-            min-height: 62px;
         }
         ::placeholder {
             color: #b2b2b2d7;
