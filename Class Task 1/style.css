@@ -16,6 +16,7 @@
         h1, h2 {
             font-family: 'Poppins', sans-serif;
             font-weight: 600;
+            text-align: center;
         }
         label, p, a, input, textarea, button {
             font-family: 'Quicksand', sans-serif;
@@ -64,7 +65,7 @@
             padding: 15px;
             background-color: #a6e6ff;
         }
-        .nav-links {
+        .nav-links, .nav-buttons {
             display: flex;
             list-style: none;
             gap: 12px;
@@ -125,7 +126,7 @@
             background-color: #1f1f27;
             color: #ffffff;
             width: 100%;
-            padding: 6px;
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
@@ -179,8 +180,6 @@
         .signin-form {
             margin: 10px;
             padding: 12px;
-            border: 3px ridge #dff8ff;
-            border-radius: 6px;
         }
         .signin-item {
             margin: 0px 0px 10px 0px;
@@ -212,14 +211,25 @@
                 text-align: center;
             }
         }
-        @media only screen and (max-width: 459px) {
+        @media only screen and (max-width: 664px) {
             .nav-links {
                 gap: 10px;
+                margin: 15px 0px 4px 0px;
             }
             nav {
                 flex-direction: column;
             }
             section {
                 scroll-margin-top: 115px;
+            }
+        }
+
+        @media only screen and (max-width: 500px) {
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .nav-links #signin-btn, .nav-links #signup-btn {
+                margin-top: 8px;
             }
         }
