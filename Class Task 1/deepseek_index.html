@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Alley Collection - Where Art Has Whiskers</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <style>
+        /* ========== CSS RESET & VARIABLES ========== */
+        :root {
+            /* Color Palette */
+            --primary-orange: #FF9505;
+            --secondary-orange: #FFB143;
+            --cream: #FFF9F0;
+            --light-cream: #FFFDF9;
+            --dark-grey: #333333;
+            --medium-grey: #666666;
+            --light-grey: #F5F5F5;
+            --accent-blue: #4A6FA5;
+            --accent-teal: #17A2B8;
+            --white: #FFFFFF;
+            --black: #000000;
+            
+            /* Typography */
+            --heading-font: 'Poppins', sans-serif;
+            --body-font: 'Open Sans', sans-serif;
+            
+            /* Spacing */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 2rem;
+            --spacing-lg: 3rem;
+            --spacing-xl: 5rem;
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 5px rgba(0,0,0,0.1);
+            --shadow-md: 0 5px 15px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 30px rgba(0,0,0,0.15);
+            
+            /* Transitions */
+            --transition-fast: 0.2s ease;
+            --transition-medium: 0.3s ease;
+            --transition-slow: 0.5s ease;
+            
+            /* Border Radius */
+            --border-radius-sm: 5px;
+            --border-radius-md: 10px;
+            --border-radius-lg: 20px;
+            --border-radius-circle: 50%;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: var(--body-font);
+            font-size: 1rem;
+            line-height: 1.6;
+            color: var(--dark-grey);
+            background-color: var(--cream);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 149, 5, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(74, 111, 165, 0.05) 0%, transparent 20%);
+        }
+        
+        /* ========== TYPOGRAPHY ========== */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--heading-font);
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            color: var(--primary-orange);
+        }
+        
+        h2 {
+            font-size: 2.2rem;
+            color: var(--dark-grey);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+        }
+        
+        p {
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition-fast);
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--primary-orange);
+            border-radius: 2px;
+        }
+        
+        .section-title.center:after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: var(--medium-grey);
+        }
+        
+        /* ========== LAYOUT & CONTAINERS ========== */
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+        
+        section {
+            padding: var(--spacing-xl) 0;
+            scroll-margin-top: 100px;
+        }
+        
+        section:nth-child(even) {
+            background-color: var(--light-cream);
+        }
+        
+        /* ========== HEADER & NAVIGATION ========== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-medium);
+        }
+        
+        .header-scrolled {
+            padding: 5px 0;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-sm) var(--spacing-md);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-orange);
+            border-radius: var(--border-radius-circle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1.5rem;
+        }
+        
+        .logo-text {
+            font-family: var(--heading-font);
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--dark-grey);
+        }
+        
+        .logo-text span {
+            color: var(--primary-orange);
+        }
+        
+        nav {
+            display: flex;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: var(--spacing-md);
+        }
+        
+        .nav-links a {
+            position: relative;
+            padding: var(--spacing-xs) 0;
+            font-weight: 500;
+            color: var(--dark-grey);
+        }
+        
+        /* Navigation Pseudo-classes */
+        .nav-links a:hover {
+            color: var(--primary-orange);
+        }
+        
+        .nav-links a:active {
+            transform: translateY(1px);
+        }
+        
+        .nav-links a:focus {
+            outline: 2px dashed var(--primary-orange);
+            outline-offset: 4px;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-orange);
+            transition: var(--transition-medium);
+        }
+        
+        .nav-links a:hover:after {
+            width: 100%;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-left: var(--spacing-md);
+        }
+        
+        .btn-signin, .btn-signup {
+            padding: 8px 16px;
+            border-radius: var(--border-radius-sm);
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .btn-signin {
+            color: var(--dark-grey);
+            border: 1px solid var(--medium-grey);
+        }
+        
+        .btn-signin:hover {
+            background-color: var(--light-grey);
+        }
+        
+        .btn-signup {
+            background-color: var(--primary-orange);
+            color: var(--white);
+        }
+        
+        .btn-signup:hover {
+            background-color: var(--secondary-orange);
+        }
+        
+        /* Mobile Navigation */
+        .mobile-nav-toggle {
+            display: none;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--dark-grey);
+        }
+        
+        /* ========== HERO SECTION ========== */
+        #home {
+            padding-top: 120px;
+            background: linear-gradient(135deg, rgba(255, 149, 5, 0.1) 0%, rgba(255, 177, 67, 0.05) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+            align-items: center;
+        }
+        
+        .hero-content h1 {
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .hero-tagline {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: var(--spacing-md);
+            color: var(--primary-orange);
+        }
+        
+        .hero-description {
+            font-size: 1.1rem;
+            margin-bottom: var(--spacing-lg);
+            max-width: 500px;
+        }
+        
+        .hero-image {
+            position: relative;
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            height: 400px;
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-medium);
+        }
+        
+        .hero-image:hover img {
+            transform: scale(1.03);
+        }
+        
+        .hero-image:before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            bottom: -10px;
+            left: -10px;
+            border: 2px dashed var(--primary-orange);
+            border-radius: var(--border-radius-lg);
+            opacity: 0;
+            transition: var(--transition-medium);
+        }
+        
+        .hero-image:hover:before {
+            opacity: 0.7;
+        }
+        
+        .paw-prints {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .paw {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 149, 5, 0.2);
+            border-radius: 50%;
+            animation: float 6s infinite ease-in-out;
+        }
+        
+        .paw:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .paw:nth-child(2) { top: 60%; left: 85%; animation-delay: 1s; }
+        .paw:nth-child(3) { top: 80%; left: 20%; animation-delay: 2s; }
+        .paw:nth-child(4) { top: 30%; left: 70%; animation-delay: 3s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+        }
+        
+        /* ========== BUTTONS ========== */
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: var(--border-radius-md);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition-medium);
+            border: none;
+            font-family: var(--heading-font);
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-orange);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-orange);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-secondary {
+            background-color: var(--accent-blue);
+            color: var(--white);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #3a5a8c;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-orange);
+            border: 2px solid var(--primary-orange);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-orange);
+            color: var(--white);
+            transform: translateY(-3px);
+        }
+        
+        /* ========== ABOUT SECTION ========== */
+        #about .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-xl);
+            align-items: center;
+        }
+        
+        .about-content h2 {
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .about-highlight {
+            background-color: rgba(255, 149, 5, 0.1);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            margin-top: var(--spacing-md);
+            border-left: 4px solid var(--primary-orange);
+        }
+        
+        .about-highlight h3 {
+            color: var(--primary-orange);
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .cat-illustration {
+            position: relative;
+            height: 400px;
+            background-color: var(--white);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .cat-tail {
+            position: absolute;
+            width: 80px;
+            height: 200px;
+            background-color: var(--primary-orange);
+            border-radius: 40px;
+            right: 40px;
+            bottom: 40px;
+            transform-origin: top center;
+            animation: tail-wag 3s infinite ease-in-out;
+        }
+        
+        @keyframes tail-wag {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(15deg); }
+            75% { transform: rotate(-10deg); }
+        }
+        
+        .cat-illustration:before {
+            content: '🐾';
+            position: absolute;
+            font-size: 3rem;
+            top: 30px;
+            left: 30px;
+            opacity: 0.7;
+        }
+        
+        .cat-illustration:after {
+            content: 'Art Has Whiskers';
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--heading-font);
+            font-weight: 600;
+            color: var(--primary-orange);
+            font-size: 1.5rem;
+        }
+        
+        /* ========== GALLERY SECTION ========== */
+        #gallery {
+            text-align: center;
+        }
+        
+        .gallery-intro {
+            max-width: 700px;
+            margin: 0 auto var(--spacing-lg);
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .gallery-item {
+            position: relative;
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            height: 300px;
+            transition: var(--transition-medium);
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition-medium);
+        }
+        
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.05);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: var(--white);
+            padding: var(--spacing-md);
+            transform: translateY(10px);
+            opacity: 0;
+            transition: var(--transition-medium);
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .gallery-title {
+            font-family: var(--heading-font);
+            font-size: 1.3rem;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .gallery-category {
+            font-size: 0.9rem;
+            color: var(--secondary-orange);
+        }
+        
+        .cat-of-day {
+            background-color: rgba(255, 149, 5, 0.1);
+            border-radius: var(--border-radius-md);
+            padding: var(--spacing-md);
+            margin-top: var(--spacing-xl);
+            border: 2px dashed var(--primary-orange);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+        }
+        
+        .cat-day-content {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .cat-day-img {
+            width: 200px;
+            height: 200px;
+            border-radius: var(--border-radius-circle);
+            overflow: hidden;
+            border: 5px solid var(--primary-orange);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .cat-day-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        /* ========== FEEDBACK SECTION ========== */
+        #feedback .container {
+            max-width: 800px;
+        }
+        
+        .feedback-form {
+            background-color: var(--white);
+            padding: var(--spacing-lg);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--light-grey);
+            border-radius: var(--border-radius-md);
+            font-family: var(--body-font);
+            font-size: 1rem;
+            transition: var(--transition-fast);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px rgba(255, 149, 5, 0.2);
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        /* ========== FOOTER ========== */
+        footer {
+            background-color: var(--dark-grey);
+            color: var(--white);
+            padding: var(--spacing-xl) 0 var(--spacing-md);
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-lg);
+        }
+        
+        .footer-logo .logo-text {
+            color: var(--white);
+        }
+        
+        .footer-about {
+            max-width: 300px;
+        }
+        
+        .footer-links h3, .footer-social h3 {
+            color: var(--primary-orange);
+            margin-bottom: var(--spacing-md);
+            font-size: 1.3rem;
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-orange);
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+        
+        .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius-circle);
+            font-size: 1.2rem;
+            transition: var(--transition-fast);
+        }
+        
+        .social-icon:hover {
+            background-color: var(--primary-orange);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: var(--spacing-md);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        /* ========== RESPONSIVE DESIGN ========== */
+        @media (max-width: 1024px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            
+            .hero-container {
+                gap: var(--spacing-lg);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2rem; }
+            h2 { font-size: 1.8rem; }
+            
+            section {
+                padding: var(--spacing-lg) 0;
+            }
+            
+            /* Navigation for mobile */
+            .mobile-nav-toggle {
+                display: block;
+                z-index: 1001;
+            }
+            
+            .nav-links, .nav-buttons {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                max-width: 300px;
+                height: 100vh;
+                background-color: var(--white);
+                box-shadow: var(--shadow-lg);
+                flex-direction: column;
+                padding: var(--spacing-xl) var(--spacing-md);
+                transition: var(--transition-medium);
+                z-index: 1000;
+            }
+            
+            .nav-links {
+                padding-top: 80px;
+            }
+            
+            .nav-buttons {
+                justify-content: flex-start;
+                padding-top: var(--spacing-md);
+            }
+            
+            /* Show mobile menu when checkbox is checked */
+            #mobile-menu-toggle:checked ~ .nav-links,
+            #mobile-menu-toggle:checked ~ .nav-buttons {
+                right: 0;
+            }
+            
+            /* Hamburger to X animation */
+            .mobile-nav-toggle i {
+                transition: var(--transition-medium);
+            }
+            
+            #mobile-menu-toggle:checked + .mobile-nav-toggle .fa-bars {
+                opacity: 0;
+                transform: rotate(90deg);
+            }
+            
+            #mobile-menu-toggle:checked + .mobile-nav-toggle .fa-times {
+                opacity: 1;
+                transform: rotate(0);
+            }
+            
+            .mobile-nav-toggle .fa-times {
+                position: absolute;
+                opacity: 0;
+                transform: rotate(-90deg);
+            }
+            
+            /* Overlay when menu is open */
+            .mobile-menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition-medium);
+            }
+            
+            #mobile-menu-toggle:checked ~ .mobile-menu-overlay {
+                opacity: 1;
+                visibility: visible;
+            }
+            
+            /* Hero section for mobile */
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .hero-image {
+                height: 300px;
+            }
+            
+            .hero-description {
+                margin: 0 auto var(--spacing-lg);
+            }
+            
+            /* About section for mobile */
+            #about .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .cat-illustration {
+                height: 300px;
+            }
+            
+            .section-title:after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            
+            /* Gallery grid for mobile */
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .cat-of-day {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.6rem; }
+            h3 { font-size: 1.4rem; }
+            
+            .container {
+                padding: 0 var(--spacing-sm);
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-image, .cat-illustration {
+                height: 250px;
+            }
+        }
+        
+        /* ========== ACCESSIBILITY ========== */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary-orange);
+            color: white;
+            padding: 8px;
+            z-index: 1001;
+            text-decoration: none;
+        }
+        
+        .skip-link:focus {
+            top: 0;
+        }
+        
+        /* Focus styles for all focusable elements */
+        button:focus, 
+        input:focus, 
+        textarea:focus,
+        select:focus,
+        a:focus {
+            outline: 2px solid var(--primary-orange);
+            outline-offset: 2px;
+        }
+        
+        /* ========== ANIMATIONS & EFFECTS ========== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        
+        /* Cat ears on headings */
+        .cat-heading {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .cat-heading:before,
+        .cat-heading:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary-orange);
+            border-radius: 50% 50% 0 0;
+            top: -15px;
+        }
+        
+        .cat-heading:before {
+            left: -25px;
+            transform: rotate(-45deg);
+        }
+        
+        .cat-heading:after {
+            right: -25px;
+            transform: rotate(45deg);
+        }
+        
+        /* Purr animation */
+        @keyframes purr {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+        
+        .purr:hover {
+            animation: purr 0.1s 3;
+        }
+        
+        /* Loading fallback for images */
+        .gallery-img, .hero-image img, .cat-day-img img {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Header with Navigation -->
+    <header id="header">
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-paw"></i>
+                </div>
+                <div class="logo-text">Cat<span>Alley</span> Collection</div>
+            </div>
+            
+            <!-- Mobile menu checkbox (hidden) -->
+            <input type="checkbox" id="mobile-menu-toggle" style="display: none;">
+            
+            <label for="mobile-menu-toggle" class="mobile-nav-toggle">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-times"></i>
+            </label>
+            
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#feedback">Feedback</a></li>
+                </ul>
+                
+                <div class="nav-buttons">
+                    <a href="#signin-section" class="btn-signin">Sign In</a>
+                    <a href="#signup-section" class="btn-signup">Sign Up</a>
+                </div>
+                
+                <!-- Mobile menu overlay -->
+                <div class="mobile-menu-overlay"></div>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section id="home">
+            <div class="paw-prints">
+                <div class="paw"></div>
+                <div class="paw"></div>
+                <div class="paw"></div>
+                <div class="paw"></div>
+            </div>
+            
+            <div class="container hero-container">
+                <div class="hero-content fade-in">
+                    <h1>Cat Alley Collection</h1>
+                    <p class="hero-tagline">Where Art Has Whiskers</p>
+                    <p class="hero-description">Step into a world of feline masterpieces. Our gallery celebrates the grace, mystery, and playful spirit of cats through a curated collection of artworks from talented artists worldwide.</p>
+                    <a href="#gallery" class="btn btn-primary purr">Explore Gallery</a>
+                </div>
+                
+                <div class="hero-image fade-in">
+                    <img src="images/cat-main.png" alt="Featured cat artwork from the Cat Alley Collection">
+                </div>
+            </div>
+        </section>
+        
+        <!-- About Section -->
+        <section id="about">
+            <div class="container">
+                <div class="about-content fade-in">
+                    <h2 class="section-title cat-heading">Behind the Whiskers</h2>
+                    <p>Cat Alley was born from a simple love for feline friends and the art they inspire. What started as a small student exhibition has grown into a celebrated gallery space dedicated to cat-themed art.</p>
+                    <p>Our mission is to showcase the diverse representations of cats in art—from regal portraits to whimsical abstractions. Each piece in our collection is carefully selected to capture the unique "purr-sonality" of our feline muses.</p>
+                    
+                    <div class="about-highlight">
+                        <h3>Student-Curated Focus</h3>
+                        <p>We're proud to support emerging artists and student curators. Our gallery provides a platform for young talents to showcase their feline-inspired creations alongside established artists.</p>
+                    </div>
+                </div>
+                
+                <div class="cat-illustration fade-in">
+                    <div class="cat-tail"></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Gallery Section -->
+        <section id="gallery">
+            <div class="container">
+                <h2 class="section-title center">Feline Masterpieces</h2>
+                <p class="gallery-intro">Browse our curated collection of cat-inspired artworks. Each piece captures a different aspect of feline nature—from playful to pensive.</p>
+                
+                <div class="gallery-grid">
+                    <!-- Gallery Item 1 -->
+                    <div class="gallery-item">
+                        <img src="images/cat1.png" alt="Ginger cat portrait" class="gallery-img">
+                        <div class="gallery-overlay">
+                            <h3 class="gallery-title">Ginger Majesty</h3>
+                            <p class="gallery-category">Ginger • Portrait</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 2 -->
+                    <div class="gallery-item">
+                        <img src="images/cat2.png" alt="Shy cat peeking" class="gallery-img">
+                        <div class="gallery-overlay">
+                            <h3 class="gallery-title">Shy Glances</h3>
+                            <p class="gallery-category">Playful • Curious</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 3 -->
+                    <div class="gallery-item">
+                        <img src="images/cat3.png" alt="Cat in a box" class="gallery-img">
+                        <div class="gallery-overlay">
+                            <h3 class="gallery-title">Box Cat</h3>
+                            <p class="gallery-category">Playful • Whimsical</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 4 -->
+                    <div class="gallery-item">
+                        <img src="images/cat4.png" alt="Serious cat portrait" class="gallery-img">
+                        <div class="gallery-overlay">
+                            <h3 class="gallery-title">Sigma Stare</h3>
+                            <p class="gallery-category">Portrait • Serious</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 5 -->
+                    <div class="gallery-item">
+                        <img src="images/cat5.png" alt="Minecraft style ginger cat" class="gallery-img">
+                        <div class="gallery-overlay">
+                            <h3 class="gallery-title">Minecraft Ginger</h3>
+                            <p class="gallery-category">Ginger • Playful</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 6 -->
+                    <div class="gallery-item">
+                        <img src="images/cat6.png" alt="Abstract cat art" class="gallery-img">
+                        <div class="gallery-overlay">
+                            <h3 class="gallery-title">Whisker Waves</h3>
+                            <p class="gallery-category">Abstract • Modern</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Cat of the Day Feature -->
+                <div class="cat-of-day">
+                    <div class="cat-day-content">
+                        <h3><i class="fas fa-crown"></i> Cat of the Day</h3>
+                        <p>Meet <strong>Whiskers</strong>, today's featured feline muse! This playful tabby inspired three artworks in our current exhibition with her mischievous antics and striking markings.</p>
+                        <p><em>"Cats choose us; we don't own them."</em> - Today's cat wisdom</p>
+                    </div>
+                    <div class="cat-day-img">
+                        <img src="images/cat1.png" alt="Cat of the day - Whiskers">
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Feedback Section -->
+        <section id="feedback">
+            <div class="container">
+                <h2 class="section-title center">Share Your Thoughts</h2>
+                <p class="tagline center">We'd love to hear your feedback about our gallery!</p>
+                
+                <div class="feedback-form fade-in">
+                    <form id="feedbackForm" action="#" method="post">
+                        <div class="form-group">
+                            <label for="name">Full Name</label>
+                            <input type="text" id="name" class="form-control" placeholder="Enter your name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Your Feedback</label>
+                            <textarea id="message" class="form-control" placeholder="Tell us what you think about our gallery, suggest improvements, or share your favorite artwork..." required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sign In Section -->
+        <section id="signin-section" style="background: var(--light-cream);">
+            <div class="container">
+                <h2 class="section-title center">Sign In</h2>
+                <p class="tagline center">Access your Cat Alley account</p>
+                
+                <div class="feedback-form" style="max-width: 500px; margin: 0 auto;">
+                    <form id="signinForm" action="#" method="post">
+                        <div class="form-group">
+                            <label for="signin-email">Email Address</label>
+                            <input type="email" id="signin-email" class="form-control" placeholder="you@example.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signin-password">Password</label>
+                            <input type="password" id="signin-password" class="form-control" placeholder="Enter your password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Sign In</button>
+                        
+                        <div style="text-align: center; margin-top: var(--spacing-md);">
+                            <p>Don't have an account? <a href="#signup-section" style="color: var(--primary-orange); font-weight: 600;">Sign Up</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Sign Up Section -->
+        <section id="signup-section">
+            <div class="container">
+                <h2 class="section-title center">Sign Up</h2>
+                <p class="tagline center">Join our feline art community</p>
+                
+                <div class="feedback-form" style="max-width: 500px; margin: 0 auto;">
+                    <form id="signupForm" action="#" method="post">
+                        <div class="form-group">
+                            <label for="signup-email">Email Address</label>
+                            <input type="email" id="signup-email" class="form-control" placeholder="you@example.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="signup-password">Password</label>
+                            <input type="password" id="signup-password" class="form-control" placeholder="Create a password" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirm-password">Confirm Password</label>
+                            <input type="password" id="confirm-password" class="form-control" placeholder="Confirm your password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                        
+                        <div style="text-align: center; margin-top: var(--spacing-md);">
+                            <p>Already have an account? <a href="#signin-section" style="color: var(--primary-orange); font-weight: 600;">Sign In</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-about">
+                    <div class="logo footer-logo">
+                        <div class="logo-text">Cat<span>Alley</span> Collection</div>
+                    </div>
+                    <p class="tagline">Where Art Has Whiskers</p>
+                    <p>Celebrating feline artistry through curated exhibitions and supporting emerging artists since 2023.</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#gallery">Gallery</a></li>
+                        <li><a href="#feedback">Feedback</a></li>
+                        <li><a href="#signin-section">Sign In</a></li>
+                        <li><a href="#signup-section">Sign Up</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-social">
+                    <h3>Follow Us</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon" aria-label="Follow us on Facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Follow us on Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Follow us on Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-icon" aria-label="Visit our Pinterest">
+                            <i class="fab fa-pinterest-p"></i>
+                        </a>
+                    </div>
+                    <p style="margin-top: var(--spacing-sm);">Share your cat art with #CatAlleyCollection</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2026 Cat Alley Collection. All rights reserved. | Designed with <i class="fas fa-heart" style="color: #ff6b6b;"></i> for cat lovers everywhere</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
