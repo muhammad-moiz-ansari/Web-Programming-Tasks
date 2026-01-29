@@ -56,19 +56,20 @@ h2 {
 }
 
 .gallery {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     justify-content: center;
-    gap: 12px;
-    width: 100vw;
-    padding: 0px;
+    gap: 20px;
+    padding: 10px;
     margin: 10px;
     border: 0px solid black;
 }
 
 .pics .image {
-    width: 225px;
-    height: 225px;
+    width: 100%;
+    object-fit: cover;
+    height: 250px;
+    border-radius: 5px;
 }
 
 .pics p {
@@ -313,6 +314,9 @@ section:nth-child(even) {
     section {
         scroll-margin-top: 115px;
     }
+    .gallery {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media only screen and (max-width: 500px) {
@@ -322,5 +326,8 @@ section:nth-child(even) {
     }
     .nav-links #signin-btn, .nav-links #signup-btn {
         margin-top: 8px;
+    }
+    .gallery {
+        grid-template-columns: 1fr;
     }
 }
