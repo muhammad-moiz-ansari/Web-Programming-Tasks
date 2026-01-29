@@ -112,11 +112,11 @@
         }
         .contact-form {
             margin: 10px;
-            padding: 10px;
+            padding: 12px;
             border: 3px ridge #dff8ff;
             border-radius: 6px;
         }
-        .contact-item p, .signin-item label {
+        .contact-item p, .signin-item p {
             margin: 0px 0px 10px 0px;
             padding: 0px;
             font-size: 18px;
@@ -182,7 +182,7 @@
             padding: 12px;
         }
         .signin-item {
-            margin: 0px 0px 10px 0px;
+            margin: 0px 0px 20px 0px;
             padding: 0px;
             font-size: 18px;
         }
@@ -190,7 +190,7 @@
             background-color: #1f1f27;
             color: #ffffff;
             width: 100%;
-            padding: 6px;
+            padding: 8px;
             border: 1px solid #ccc;
             border-radius: 4px;
             box-sizing: border-box;
