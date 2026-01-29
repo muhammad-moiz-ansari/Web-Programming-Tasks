@@ -77,6 +77,18 @@ h2 {
     margin: 5px 0;
     color: var(--dark-color);
 }
+.pics p {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s ease;
+}
+
+.pics:hover p {
+    opacity: 1;
+    max-height: 50px;
+    transition: all 0.8s ease;
+}
 
 .pics:hover {
     transform: scale(1.03);
@@ -93,6 +105,7 @@ nav {
     margin: 0px;
     padding: 15px;
     background-color: var(--primary-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .nav-links, .nav-buttons {
@@ -149,14 +162,7 @@ nav {
     cursor: default;
 }
 
-.contact-form {
-    margin: 10px;
-    padding: 12px;
-    border: 3px ridge var(--secondary-color);
-    border-radius: 6px;
-    background-color: var(--light-cream);
-}
-
+/* Forms */
 .contact-item p, .signin-item p {
     margin: 0px 0px 10px 0px;
     padding: 0px;
@@ -214,7 +220,7 @@ footer {
 }
 
 /* sign in section */
-#signin-section, #signup-section {
+#signin-section, #signup-section, #feedback-section {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -222,7 +228,7 @@ footer {
     background-color: var(--light-cream);
 }
 
-#sign-container {
+#form-container {
     width: 500px;
     padding: 20px;
     margin: 20px;
@@ -232,7 +238,7 @@ footer {
     border: 2px solid var(--primary-color);
 }
 
-.signin-form {
+.signin-form, .contact-form {
     margin: 10px;
     padding: 12px;
 }
