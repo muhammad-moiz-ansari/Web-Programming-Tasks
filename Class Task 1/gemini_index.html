@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Alley Collection | Where Art Has Whiskers</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* =========================================
+           1. CSS VARIABLES & RESET
+           ========================================= */
+        :root {
+            --primary-color: #ff8c42; /* Ginger Orange */
+            --secondary-color: #f9f3ed; /* Cream */
+            --accent-color: #5d737e; /* Blue-Grey */
+            --text-dark: #2d3436;
+            --text-light: #ffffff;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--secondary-color);
+            background-image: radial-gradient(#e5ddd5 1px, transparent 1px);
+            background-size: 30px 30px; /* Subtle pattern */
+        }
+
+        h1, h2, h3 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul { list-style: none; }
+
+        /* =========================================
+           2. NAVIGATION
+           ========================================= */
+        header {
+            background: var(--text-light);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 1rem 5%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+            background: rgba(255, 140, 66, 0.1);
+        }
+
+        .nav-links a:active { transform: scale(0.95); }
+        .nav-links a:focus { outline: 2px solid var(--primary-color); }
+
+        .hamburger { display: none; font-size: 1.5rem; cursor: pointer; }
+
+        /* =========================================
+           3. HERO SECTION
+           ========================================= */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 80px 10%;
+            background: linear-gradient(135deg, #fff 50%, var(--secondary-color) 50%);
+            min-height: 80vh;
+        }
+
+        .hero-content { flex: 1; }
+        .hero-content h1 { font-size: 3rem; margin-bottom: 1rem; line-height: 1.2; }
+        .hero-content p { font-size: 1.2rem; margin-bottom: 2rem; color: #636e72; }
+
+        .hero-image { flex: 1; text-align: right; }
+        .hero-image img { 
+            max-width: 100%; 
+            border-radius: 50px 5px 50px 5px; 
+            border: 8px solid var(--text-light);
+            box-shadow: var(--shadow);
+        }
+
+        .cta-btn {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 700;
+            display: inline-block;
+            transition: var(--transition);
+        }
+
+        .cta-btn:hover { background: #e67e22; transform: translateY(-3px); }
+
+        /* =========================================
+           4. GALLERY SECTION
+           ========================================= */
+        .gallery-section { padding: 80px 10%; text-align: center; }
+        .section-title { margin-bottom: 3rem; font-size: 2.5rem; }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            background: #fff;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+            transition: var(--transition);
+        }
+
+        .overlay {
+            position: absolute;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 140, 66, 0.9);
+            color: white;
+            padding: 15px;
+            transition: 0.4s ease;
+        }
+
+        .gallery-item:hover .overlay { bottom: 0; }
+        .gallery-item:hover img { transform: scale(1.1); }
+
+        /* =========================================
+           5. FORMS (Feedback, Sign In/Up)
+           ========================================= */
+        .form-section {
+            padding: 80px 10%;
+            background: #fff;
+            max-width: 600px;
+            margin: 40px auto;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus { border-color: var(--primary-color); outline: none; }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        /* =========================================
+           6. CREATIVITY: CAT OF THE DAY
+           ========================================= */
+        .cat-day-card {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 40px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* =========================================
+           7. FOOTER
+           ========================================= */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 50px 10% 20px;
+            text-align: center;
+        }
+
+        .footer-socials { margin-bottom: 20px; }
+        .footer-socials a { font-size: 1.5rem; margin: 0 15px; transition: var(--transition); }
+        .footer-socials a:hover { color: var(--primary-color); }
+
+        /* =========================================
+           8. RESPONSIVE DESIGN
+           ========================================= */
+        @media (max-width: 1024px) {
+            .hero { flex-direction: column; text-align: center; }
+            .hero-image { margin-top: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; } /* Simplified for single file logic */
+            .hamburger { display: block; }
+            .hero-content h1 { font-size: 2.2rem; }
+            .gallery-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="#main-content" style="position: absolute; left: -10000px;">Skip to main content</a>
+
+    <header>
+        <nav aria-label="Main Navigation">
+            <div class="logo">
+                <i class="fas fa-cat"></i> <strong>Catally</strong>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#feedback">Feedback</a></li>
+                <li><a href="#signin">Sign In</a></li>
+                <li><a href="#signup" style="color: var(--primary-color);">Sign Up</a></li>
+            </ul>
+            <div class="hamburger" aria-label="Open Menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        
+        <section class="hero" id="home">
+            <article class="hero-content">
+                <h1>Where Art Has Whiskers</h1>
+                <p>Step into a world of feline masterpieces. From the majestic ginger to the curious box-dweller, we celebrate the soul of every cat through curated digital art.</p>
+                <a href="#gallery" class="cta-btn">Explore Collection</a>
+            </article>
+            <aside class="hero-image">
+                <img src="images/cat-main.png" alt="Featured majestic cat artwork">
+            </aside>
+        </section>
+
+        <section class="gallery-section" id="about" style="background: rgba(0,0,0,0.02);">
+            <h2 class="section-title">Behind the Whiskers</h2>
+            <div style="max-width: 800px; margin: 0 auto; font-size: 1.1rem;">
+                <p>Cat Alley was born from a simple obsession: the expressive nature of our feline friends. What started as a student project has bloomed into a sanctuary for cat lovers. Every piece in our collection is curated to showcase the "Purr-sonality" of cats—their independence, their whimsy, and their mysterious grace.</p>
+            </div>
+        </section>
+
+        <section class="gallery-section" id="gallery">
+            <h2 class="section-title">The Collection</h2>
+            <div class="gallery-grid">
+                <article class="gallery-item">
+                    <img src="images/cat1.png" alt="The Classic Ginger Cat">
+                    <div class="overlay"><h3>Ginger</h3><p>The fiery adventurer.</p></div>
+                </article>
+                <article class="gallery-item">
+                    <img src="images/cat2.png" alt="A shy kitten hiding">
+                    <div class="overlay"><h3>Shy Cat</h3><p>Finds beauty in the shadows.</p></div>
+                </article>
+                <article class="gallery-item">
+                    <img src="images/cat3.png" alt="Cat sitting in a cardboard box">
+                    <div class="overlay"><h3>Box Cat</h3><p>If it fits, I sits.</p></div>
+                </article>
+                <article class="gallery-item">
+                    <img src="images/cat4.png" alt="Sigma Cat looking cool">
+                    <div class="overlay"><h3>Sigma Cat</h3><p>Unyielding confidence.</p></div>
+                </article>
+                <article class="gallery-item">
+                    <img src="images/cat5.png" alt="Minecraft style blocky ginger cat">
+                    <div class="overlay"><h3>Minecraft Ginger</h3><p>Pixel-perfect purrs.</p></div>
+                </article>
+                <article class="gallery-item">
+                    <img src="images/cat6.png" alt="Staring Cat">
+                    <div class="overlay"><h3>The Watcher</h3><p>He sees your snacks.</p></div>
+                </article>
+            </div>
+
+            <div class="cat-day-card">
+                <i class="fas fa-paw fa-3x"></i>
+                <div>
+                    <h3>Purr-sonality of the Day</h3>
+                    <p>"The smallest feline is a masterpiece." — Leonardo da Vinci</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-section" id="feedback">
+            <h2 style="text-align: center; margin-bottom: 20px;">Send a Meow</h2>
+            <form action="#">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="email@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" rows="5" placeholder="Tell us about your cat..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Submit Feedback</button>
+            </form>
+        </section>
+
+        <section class="form-section" id="signin">
+            <h2 style="text-align: center; margin-bottom: 20px;">Welcome Back</h2>
+            <form action="#">
+                <div class="form-group">
+                    <label for="semail">Email</label>
+                    <input type="email" id="semail" required>
+                </div>
+                <div class="form-group">
+                    <label for="spass">Password</label>
+                    <input type="password" id="spass" required>
+                </div>
+                <button type="submit" class="btn-submit" style="background: var(--primary-color);">Sign In</button>
+                <p style="margin-top: 15px; text-align: center;">New here? <a href="#signup" style="color: var(--primary-color);">Create account</a></p>
+            </form>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="footer-socials">
+            <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+        </div>
+        <p>&copy; 2026 Catally Art Gallery. All rights reserved.</p>
+        <p style="font-size: 0.8rem; margin-top: 10px; color: #999;">Made with <i class="fas fa-heart" style="color: #e74c3c;"></i> for Cats.</p>
+    </footer>
+
+</body>
+</html>
