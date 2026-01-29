@@ -9,6 +9,10 @@
             color: white;
             overflow-x: hidden;
             margin: 0px;
+
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         h1, h2, p {
             margin-left: 10px;
@@ -158,18 +162,18 @@
             color: #04022b;
             text-align: center;
             padding: 10px;
-            margin-top: 20px;
+            margin-top: auto;
             font-size: 16px;
         }
 
         /* sign in section */
-        #sign-section {
+        #signin-section, #signup-section {
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
-        #signin-section {
+        #sign-container {
             width: 500px;
             padding: 20px;
             margin: 20px;
@@ -203,6 +207,16 @@
             color: #ffffff;
             border-style: none;
             transition: all 0.3s ease;
+        }
+
+        .sign-link {
+            color: #5ce4f9; 
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .sign-link:hover {
+            color: #4fc1d2;
         }
 
         /* Responsive Design */
