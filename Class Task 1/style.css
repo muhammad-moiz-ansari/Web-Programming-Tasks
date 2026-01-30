@@ -15,7 +15,7 @@ html {
 }
 
 section {
-    scroll-margin-top: 96px;
+    scroll-margin-top: 80px;
 }
 
 body {
@@ -453,6 +453,9 @@ section:nth-child(even) {
     }
     .nav-links #signin-btn, .nav-links #signup-btn {
         margin-top: 8px;
+    }
+    section {
+        scroll-margin-top: 150px;
     }
     .gallery {
         grid-template-columns: 1fr;
