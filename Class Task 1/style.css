@@ -233,10 +233,11 @@ footer {
     width: 500px;
     padding: 20px;
     margin: 20px;
-    background-color: var(--light-cream);
+    background-color: var(--cream-color);
     border-radius: 8px;
     max-width: 612px;
     border: 2px solid var(--primary-color);
+    box-shadow: 0 4px 12px rgba(255, 151, 5, 0.399);
 }
 
 .signin-form, .contact-form {

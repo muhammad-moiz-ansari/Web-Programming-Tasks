@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Alley Collection - Where Art Has Whiskers</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.png" type="image/png">
+    <style>
+        /* 1. CSS Reset/Normalize */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        ul {
+            list-style: none;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* 2. CSS Variables */
+        :root {
+            --primary-color: #ff8c00; /* Orange for ginger cats */
+            --accent-color: #4682b4; /* Blue for contrast */
+            --background-color: #fffaf0; /* Cream */
+            --text-color: #333;
+            --light-text: #fff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --font-heading: 'Poppins', sans-serif;
+            --font-body: 'Open Sans', sans-serif;
+            --spacing-small: 1rem;
+            --spacing-medium: 2rem;
+            --spacing-large: 4rem;
+        }
+
+        /* 3. Base Styles */
+        body {
+            background: linear-gradient(to bottom, var(--background-color), #ffe4b5);
+            font-size: 1rem;
+        }
+        h1, h2, h3 {
+            font-family: var(--font-heading);
+            color: var(--primary-color);
+        }
+        h1 {
+            font-size: 2.5rem;
+        }
+        h2 {
+            font-size: 2rem;
+        }
+        h3 {
+            font-size: 1.5rem;
+        }
+        p {
+            margin-bottom: var(--spacing-small);
+        }
+        button, input[type="submit"] {
+            background: var(--accent-color);
+            color: var(--light-text);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            font-family: var(--font-heading);
+            transition: background 0.3s;
+        }
+        button:hover, input[type="submit"]:hover {
+            background: darken(var(--accent-color), 10%);
+        }
+        input, textarea {
+            padding: 0.75rem;
+            border: 1px solid var(--shadow-color);
+            width: 100%;
+            margin-bottom: var(--spacing-small);
+        }
+
+        /* 4. Layout Styles */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-small);
+        }
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 4px var(--shadow-color);
+            z-index: 1000;
+        }
+        nav ul {
+            display: flex;
+            justify-content: space-around;
+            padding: var(--spacing-small) 0;
+        }
+        nav ul li a {
+            padding: 0.5rem 1rem;
+            transition: background 0.3s, color 0.3s;
+        }
+        main {
+            padding-top: 80px; /* Space for fixed header */
+        }
+        section {
+            padding: var(--spacing-large) 0;
+        }
+        footer {
+            background: var(--primary-color);
+            color: var(--light-text);
+            text-align: center;
+            padding: var(--spacing-medium);
+        }
+
+        /* 5. Component Styles */
+        /* Navigation Pseudo-classes */
+        nav ul li a:hover {
+            background: var(--primary-color);
+            color: var(--light-text);
+        }
+        nav ul li a:active {
+            background: darken(var(--primary-color), 10%);
+        }
+        nav ul li a:focus {
+            outline: 2px solid var(--accent-color);
+        }
+        nav ul li a::before {
+            content: '\f6d3'; /* Cat icon from Font Awesome */
+            font-family: 'Font Awesome 6 Free';
+            margin-right: 0.5rem;
+            font-weight: 900;
+        }
+
+        /* Hero */
+        #hero {
+            text-align: center;
+            background: url('images/cat-main.png') no-repeat center/cover;
+            color: var(--light-text);
+            padding: var(--spacing-large) var(--spacing-small);
+            position: relative;
+        }
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        #hero > * {
+            position: relative;
+            z-index: 1;
+        }
+        #hero button {
+            margin-top: var(--spacing-small);
+        }
+
+        /* Gallery */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-small);
+        }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 8px var(--shadow-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px var(--shadow-color);
+        }
+        .gallery-item::after {
+            content: attr(data-title);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--light-text);
+            padding: 0.5rem;
+            text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+        .gallery-item:hover::after {
+            transform: translateY(0);
+        }
+
+        /* Forms */
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .auth-form {
+            background: #fff;
+            padding: var(--spacing-medium);
+            box-shadow: 0 4px 8px var(--shadow-color);
+            margin-bottom: var(--spacing-medium);
+        }
+
+        /* Footer */
+        footer ul {
+            display: flex;
+            justify-content: center;
+            margin-top: var(--spacing-small);
+        }
+        footer ul li {
+            margin: 0 1rem;
+        }
+        footer a:hover i {
+            color: var(--accent-color);
+        }
+
+        /* Creativity: Cat-themed animation */
+        .cat-paw {
+            position: absolute;
+            bottom: -50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            animation: paw-wave 2s infinite;
+        }
+        @keyframes paw-wave {
+            0%, 100% { transform: translateX(-50%) rotate(0); }
+            50% { transform: translateX(-50%) rotate(10deg); }
+        }
+
+        /* Hamburger Menu for Mobile */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        #nav-menu {
+            display: flex;
+        }
+
+        /* 6. Responsive Media Queries */
+        @media (max-width: 767px) {
+            /* Mobile */
+            body {
+                font-size: 0.9rem;
+            }
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.75rem; }
+            h3 { font-size: 1.25rem; }
+            nav ul {
+                flex-direction: column;
+                display: none;
+            }
+            .hamburger {
+                display: block;
+                position: absolute;
+                right: var(--spacing-small);
+                top: 1rem;
+            }
+            #nav-menu.active {
+                display: flex;
+            }
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1024px) {
+            /* Tablet */
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1025px) {
+            /* Desktop */
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* Accessibility */
+        a.skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--accent-color);
+            color: var(--light-text);
+            padding: 0.5rem;
+            z-index: 1001;
+        }
+        a.skip-link:focus {
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header>
+        <div class="container">
+            <nav>
+                <h1>Cat Alley Collection</h1>
+                <span class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></span>
+                <ul id="nav-menu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#feedback">Feedback</a></li>
+                    <li><a href="#signin">Sign In</a></li>
+                    <li><a href="#signup">Sign Up</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <main id="main-content">
+        <section id="hero">
+            <h2>Step into a world of feline masterpieces</h2>
+            <p>Where Art Has Whiskers</p>
+            <p>Cat Alley Collection is a student-curated gallery celebrating the whimsical world of cats through art.</p>
+            <button onclick="window.location.href='#gallery'">View Gallery <i class="fas fa-paw"></i></button>
+            <span class="cat-paw"><i class="fas fa-paw"></i></span>
+        </section>
+        <section id="about" class="container">
+            <h2>Behind the Whiskers</h2>
+            <p>Cat Alley was born from a passion for felines and fine art. Our student-curated collection features whimsical cat-themed artworks that capture the purr-sonality of our favorite companions.</p>
+            <p>From ginger tabbies to mysterious black cats, each piece tells a tail... er, tale of feline fancy.</p>
+        </section>
+        <section id="gallery" class="container">
+            <h2>Our Gallery</h2>
+            <div class="gallery-grid">
+                <article class="gallery-item" data-title="Ginger">
+                    <img src="images/cat1.png" alt="Ginger cat artwork">
+                </article>
+                <article class="gallery-item" data-title="Shy Cat">
+                    <img src="images/cat2.png" alt="Shy cat artwork">
+                </article>
+                <article class="gallery-item" data-title="Box Cat">
+                    <img src="images/cat3.png" alt="Box cat artwork">
+                </article>
+                <article class="gallery-item" data-title="Sigma Cat">
+                    <img src="images/cat4.png" alt="Sigma cat artwork">
+                </article>
+                <article class="gallery-item" data-title="Minecraft Ginger">
+                    <img src="images/cat5.png" alt="Minecraft ginger cat artwork">
+                </article>
+                <article class="gallery-item" data-title="Playful Kitten">
+                    <img src="images/cat6.png" alt="Playful kitten artwork">
+                </article>
+            </div>
+        </section>
+        <section id="feedback" class="container">
+            <h2>Feedback</h2>
+            <form>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" rows="5" required></textarea>
+                <input type="submit" value="Submit">
+            </form>
+        </section>
+        <section id="signin" class="container">
+            <h2>Sign In</h2>
+            <form class="auth-form">
+                <label for="signin-email">Email:</label>
+                <input type="email" id="signin-email" name="email" required>
+                <label for="signin-password">Password:</label>
+                <input type="password" id="signin-password" name="password" required>
+                <input type="submit" value="Sign In">
+            </form>
+            <p>Don't have an account? <a href="#signup">Sign Up</a></p>
+        </section>
+        <section id="signup" class="container">
+            <h2>Sign Up</h2>
+            <form class="auth-form">
+                <label for="signup-email">Email:</label>
+                <input type="email" id="signup-email" name="email" required>
+                <label for="signup-password">Password:</label>
+                <input type="password" id="signup-password" name="password" required>
+                <label for="confirm-password">Confirm Password:</label>
+                <input type="password" id="confirm-password" name="confirm-password" required>
+                <input type="submit" value="Sign Up">
+            </form>
+            <p>Already have an account? <a href="#signin">Sign In</a></p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 Cat Alley Collection. All rights reserved.</p>
+        <ul>
+            <li><a href="#home"><i class="fas fa-home" aria-label="Home"></i></a></li>
+            <li><a href="https://twitter.com" target="_blank"><i class="fab fa-twitter" aria-label="Twitter"></i></a></li>
+            <li><a href="https://instagram.com" target="_blank"><i class="fab fa-instagram" aria-label="Instagram"></i></a></li>
+            <li><a href="https://facebook.com" target="_blank"><i class="fab fa-facebook" aria-label="Facebook"></i></a></li>
+        </ul>
+    </footer>
+    <script>
+        function toggleMenu() {
+            document.getElementById('nav-menu').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
