@@ -16,7 +16,34 @@
     font-family: Arial;
   }
 
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .arrowCount {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 80px;
+    height: 60px;
+    
+    font-size: 20px;
+    background-color: antiquewhite;
+    border-radius: 10px;
+    padding: 8px;
+    box-shadow: 0 4px 4px 2.5px rgba(0, 0, 0, 0.299);
+  }
+
   .displayBoard {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -29,12 +56,11 @@
   }
 
   #timer {
-    display: flex;
-    justify-content: center;
     font-size: 24px;
     background: white;
     padding: 5px 15px;
     border-radius: 15px;
+    box-shadow: 0 1px 4px 2.5px rgba(0, 0, 0, 0.299);
   }
 
   #score {
@@ -42,6 +68,7 @@
     background: white;
     padding: 5px 15px;
     border-radius: 20px;
+    box-shadow: 0 1px 4px 2.5px rgba(0, 0, 0, 0.299);
   }
 
   #gameArea {
@@ -55,7 +82,7 @@
   #bow {
     position: absolute;
     left: 50px;
-    top: 50%;
+    top: 55%;
     font-size: 80px;
     color: rgb(105, 71, 34);
     width: 40px;
@@ -88,9 +115,15 @@
 
 <body>
 
-  <div class="displayBoard">
-    <div id="timer">Time: 60 s</div>
-    <div id="score">Score: 0</div>
+  <div class="navbar">
+    <div class="displayBoard">
+      <div id="timer">Time: 60 s</div>
+      <div id="score">Score: 0</div>
+    </div>
+    <div class="arrowCount">
+      <img src="sprites/target.png" alt="" style="width: 100%; height: 100%; position: left;">
+      <p style="width: 200px">10</p>
+    </div>
   </div>
 
   <div id="gameArea">
@@ -110,11 +143,12 @@
 <script>
   const arrow = document.getElementById("arrow");
   const target = document.getElementById("target");
+  const bow = document.getElementById("bow");
   const scoreDisplay = document.getElementById("score");
   const timeDisplay = document.getElementById("timer");
 
   let gameOver = 0;
-  let timeLeft = 5;
+  let timeLeft = 60;
   let score = 0;
   let arrowMoving = false;
   let arrowPinned = false;
@@ -151,8 +185,8 @@
     setInterval(() => {
       if (gameOver) return;
       let top = target.offsetTop;
-      let topMargin = 120;
-      if (top <= 0 + topMargin || top >= window.innerHeight - (100 + topMargin)) {
+      let topMargin = 100;
+      if (top <= 0 + topMargin || top >= window.innerHeight - (80 + topMargin)) {
         targetDirection *= -1;
       }
       target.style.top = top + (5 * targetDirection) + "px";
@@ -170,7 +204,7 @@
   function endGame() {
     if (!gameOver) return;
     resetArrow();
-    target.style.top = "253px";
+    target.style.top = (window.innerHeight - target.offsetHeight) / 2 + "px"; //"253px";
     arrowPinned = false;
     arrowMoving = false;
     alert("Game Over! Your final score is: " + score);
@@ -189,7 +223,6 @@
       return;
     }
     
-    const bow = document.getElementById("bow");
     arrowMoving = true;
 
     let arrowInterval = setInterval(() => {
@@ -198,10 +231,12 @@
       let hitboxOffset = (target.offsetWidth / 2) - 7;  // Adjust hitbox for better accuracy
 
       /* Collision detection */
+      let arrowTip = arrow.offsetLeft + arrow.offsetWidth;
       if (
-        arrow.offsetLeft + arrow.offsetWidth >= target.offsetLeft + hitboxOffset &&
+        arrowTip >= target.offsetLeft + hitboxOffset &&
+        arrowTip <= target.offsetLeft + hitboxOffset + 15 &&
         arrow.offsetTop >= target.offsetTop &&
-        arrow.offsetTop <= target.offsetTop + target.offsetHeight
+        arrow.offsetTop + arrow.offsetHeight <= target.offsetTop + target.offsetHeight
       ) {
         updateScore();
         //resetArrow();
