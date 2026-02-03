@@ -1,0 +1,215 @@
+# Comprehensive Prompt: Cat Art Gallery Website Clone
+
+## **Project Overview**
+Create a single-page, responsive website for "Cat Alley Collection" (also referred to as Catalley/Catally), a feline art gallery. The website should capture the whimsical, artistic spirit of cats while maintaining professional web design standards. All code must be in ONE HTML file with embedded CSS.
+
+## **Core Requirements**
+
+### **1. HTML5 Semantic Structure (2 marks)**
+- Use proper semantic elements: `<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>`, `<footer>`
+- Implement semantic tags for content organization
+- Ensure logical document outline without using generic `<div>` where semantic tags apply
+
+### **2. CSS Selectors (2 marks)**
+- **Type Selectors:** Style HTML elements directly (h1, p, a, etc.)
+- **Class Selectors:** Use `.class-name` for reusable styles
+- **ID Selectors:** Use `#id-name` for unique elements
+- Demonstrate hierarchy: `nav ul li a`
+
+### **3. Navigation Bar with Pseudo-classes (2 marks)**
+- Create a fixed/sticky navigation bar with: Home, About, Gallery, Feedback, Sign In, Sign Up
+- Implement pseudo-classes for all navigation links:
+  - `:hover` - change color/background on mouseover
+  - `:active` - style when being clicked
+  - `:focus` - style for keyboard navigation accessibility
+- Consider `:before` or `:after` for decorative elements
+
+### **4. External CSS Simulation (2 marks)**
+- Include all CSS within `<style>` tags in the HTML file
+- Organize CSS logically: reset, variables, typography, layout, components, responsive
+- Use CSS comments to separate sections
+
+### **5. Visual Design (2 marks)**
+- **Background:** Gradient or subtle cat-pattern background image
+- **Color Scheme:** 
+  - Primary: Warm tones (oranges, creams for ginger cats)
+  - Accent: Blues/greys for contrast
+  - Text: Dark grey/black with white for contrast
+- **Fonts:** Use Google Fonts (suggestions: 'Poppins' for headings, 'Open Sans' for body)
+- Implement a cohesive color palette using CSS variables
+
+### **6. Creativity & Originality (2 marks)**
+- Add subtle cat-themed animations (paw prints, tail wags)
+- Create custom cat-shaped elements or borders
+- Implement a "cat of the day" feature
+- Add interactive hover effects on gallery images
+- Include Easter eggs or playful elements consistent with cat theme
+
+### **7. Responsive Design with Media Queries (2 marks)**
+- Mobile-first approach
+- Breakpoints:
+  - Mobile: < 768px
+  - Tablet: 768px - 1024px
+  - Desktop: > 1024px
+- Responsive gallery grid (flexbox or CSS grid)
+- Collapsible navigation menu for mobile
+- Adjust font sizes, padding, and margins for each viewport
+
+### **8. Typography with Web Fonts (2 marks)**
+- Import at least 2 Google Fonts
+- Establish typographic hierarchy:
+  - h1: 2.5rem-3rem
+  - h2: 2rem-2.5rem
+  - h3: 1.5rem-1.75rem
+  - Body: 1rem-1.2rem
+- Set proper line-height (1.5-1.6 for body)
+- Implement responsive font sizes using `rem` units
+
+### **9. CSS Icons (2 marks)**
+- **Font Awesome:** Use for social media, user account, and navigation icons
+- **Google Icons/Material Icons:** Use for buttons, forms, and decorative elements
+- Implement icon-only buttons for mobile
+- Ensure icons are accessible with proper ARIA labels
+
+### **10. Overall Neatness & Professionalism (2 marks)**
+- Clean, well-commented code
+- Consistent indentation and formatting
+- No broken links or placeholder text in final version
+- Proper use of whitespace
+- Accessible color contrast ratios
+- Valid HTML5 and CSS3
+
+## **Page Sections to Implement**
+
+### **Header/Navigation**
+- Logo: "Cat Alley Collection" or "Catalley" 
+- Tagline: "Where Art Has Whiskers"
+- Fixed navigation bar with all required links
+- Responsive hamburger menu for mobile
+
+### **Hero Section**
+- Featured cat artwork
+- Main tagline: "Step into a world of feline masterpieces"
+- Brief introduction text from screenshot 1
+- Call-to-action button to view gallery
+
+### **About Section**
+- Title: "Behind the Whiskers"
+- Content from screenshot 1: "Cat alley was born from..."
+- Student-curated focus
+- "Purr-sonality" playful text
+
+### **Gallery Section**
+- Grid layout of cat images (minimum 6 as shown in screenshot 2)
+- Image titles: Ginger, Shy Cat, Box Cat, Sigma Cat, Minecraft Ginger, etc.
+- Hover effects: enlarge, show title overlay, subtle shadow
+- Filter options if creative points allow
+
+### **Feedback Section**
+- Form with:
+  - Name field
+  - Email field with placeholder
+  - Message textarea
+  - Submit button
+- Design matching screenshot 3
+
+### **Authentication Sections**
+**Sign In:**
+- Email field
+- Password field
+- Sign In button
+- Link to Sign Up (screenshot 4)
+
+**Sign Up:**
+- Email field
+- Password field
+- Confirm Password field
+- Sign Up button
+- Link to Sign In (screenshots 5 & 6)
+
+### **Footer**
+- Copyright: "© 2026 Catally Art Gallery. All rights reserved."
+- Social media links with icons
+- Quick links to main sections
+
+## **Technical Implementation Details**
+
+### **HTML Structure**
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cat Alley Collection - Where Art Has Whiskers</title>
+    <!-- Font & Icon Links -->
+    <!-- Embedded CSS -->
+</head>
+<body>
+    <!-- Skip to content link for accessibility -->
+    <!-- Header with navigation -->
+    <!-- Main content sections -->
+    <!-- Footer -->
+</body>
+</html>
+```
+
+### Images Folder
+The gallery images are in the folder named "images" of which structure is as follows (all are square images except 'cat-main.png' is horizontal):
+images/
+├── cat1.png
+├── cat2.png
+├── cat3.png
+├── cat4.png
+├── cat5.png
+├── cat6.png
+├── cat-main.png (if needed)
+├── favicon.png
+
+
+### **CSS Organization**
+1. CSS Reset/Normalize
+2. CSS Variables (colors, fonts, spacing)
+3. Base Styles
+4. Layout Styles
+5. Component Styles
+6. Responsive Media Queries
+
+### **Interactive Elements**
+- Smooth scrolling for navigation
+- Form validation feedback
+- Toggle between Sign In/Sign Up without page reload (optional for creativity)
+- Image lightbox for gallery (optional)
+
+### **Accessibility Features**
+- Alt text for all images
+- ARIA labels for icons
+- Keyboard navigation support
+- Focus states for all interactive elements
+- Sufficient color contrast
+
+## **Deliverables**
+1. One HTML file containing all code
+2. Fully responsive design tested on mobile, tablet, and desktop
+3. All required sections implemented
+4. Clean, professional presentation matching the spirit of the screenshots
+5. Creative cat-themed enhancements while maintaining usability
+
+## **Evaluation Criteria**
+- Adherence to all 10 requirements (2 marks each)
+- Visual fidelity to provided screenshots
+- Code quality and organization
+- Responsive behavior
+- Creativity within the cat art gallery theme
+- User experience and accessibility
+
+## **Extra Credit Considerations**
+- Implement a dark/light mode toggle
+- Add a working image filter for gallery
+- Create a "random cat fact" generator
+- Implement localStorage for form data persistence
+- Add subtle CSS animations for page transitions
+
+**Note:** While cloning the design from screenshots, ensure the website has a cohesive identity (choose one name: Cat Alley Collection, Catalley, or Catally) and maintain consistency throughout the implementation.
+
+Please give only HTML + CSS

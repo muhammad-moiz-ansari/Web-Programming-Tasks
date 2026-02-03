@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Nested Divs</title>
+        <style>
+            .d1 {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                justify-content: center;
+                align-items: center;
+                max-height: 400px;
+                height: 200px;
+                background-color: bisque;
+                border-radius: 5px;
+            }
+            .d2-paused {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                height: 100px;
+                width: 100px;
+                background-color: rgb(243, 203, 25);
+                border-radius: 50%;
+                animation: animate 2s infinite ease-in-out;
+                animation-play-state: paused;
+            }
+            .d2-started {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                height: 100px;
+                width: 100px;
+                background-color: rgb(243, 203, 25);
+                border-radius: 50%;
+                animation: animate 2s infinite ease-in-out;
+                animation-play-state: running;
+            }
+            @keyframes animate {
+                0% { transform: translateX(0%); }
+                25% { transform: translateX(-70%); }
+                75% { transform: translateX(70%); }
+                100% { transform: translateX(0%); }
+            }
+            .paused-btn {
+                cursor: pointer;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                background-color: teal;
+                color: white;
+            }
+            .started-btn {
+                cursor: pointer;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                background-color: rgb(128, 28, 0);
+                color: white;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="d1">
+            <div class="d2-paused" id="targetDiv">
+                O
+            </div>
+            <button class="paused-btn" id="toggleButton" onclick="toggleTarget()">Start</button>
+        </div>
+    </body>
+    <script>
+        function toggleTarget() {
+            const button = document.getElementById("toggleButton");
+            const targetDiv = document.getElementById("targetDiv");
+
+            if (targetDiv.classList.contains("d2-started")) {
+                targetDiv.classList.remove("d2-started");
+                targetDiv.classList.add("d2-paused");
+                button.textContent = "Start";
+                button.classList.remove("started-btn");
+                button.classList.add("paused-btn");
+                console.log("Paused");
+            }
+            else {
+                targetDiv.classList.remove("d2-paused");
+                targetDiv.classList.add("d2-started");
+                button.textContent = "Pause";
+                button.classList.remove("paused-btn");
+                button.classList.add("started-btn");
+                console.log("Started");
+            }
+        }
+    </script>
+</html>
