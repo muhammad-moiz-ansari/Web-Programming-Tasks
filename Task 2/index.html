@@ -98,10 +98,10 @@
   #bow {
     position: absolute;
     top: 55%;
-    left: 50px;
-    font-size: 80px;
+    left: 25px;
+    font-size: 104px;
     color: rgb(105, 71, 34);
-    width: 40px;
+    width: 73px;
     height: 130px;
     transform: translateY(-50%);  /* To bring bow's center equal to arrow's height */
   }
@@ -110,7 +110,7 @@
     position: absolute;
     top: 55%;
     left: 39px;
-    width: 85px;
+    width: 91px;
     height: 9px;
     display: block;
   }
@@ -151,7 +151,7 @@
       <img src="sprites/arrow.png" alt="=======" style="width: 100%; height: 100%; position: inherit;">
     </div>
     <div id="bow">
-      <img src="sprites/bow.png" alt="}" style="width: 100%; height: 100%; position: inherit;">
+      <img id="bowImg" src="sprites/bow2.png" alt="}" style="width: 100%; height: 100%; position: inherit;">
     </div>
   </div>
 
@@ -163,7 +163,8 @@
   const timeDisplay = document.getElementById("timer");
   const arrowCountDisplay = document.getElementById("arrowCount");
   const bagImage = document.getElementById("bagImg");
-  const scoreInc = document.getElementById("incScore")
+  const scoreInc = document.getElementById("incScore");
+  const bowImage = document.getElementById("bowImg");
 
   ///////////////////
   //               //
@@ -293,6 +294,7 @@
     
     arrowMoving = true;
     updateArrowCount();
+    shoot();
 
     arrowInterval = setInterval(() => {
       let arrowTip = arrow.offsetLeft + arrow.offsetWidth;
@@ -385,8 +387,62 @@
 
   function resetArrow() {
     arrowMoving = false;
-    arrow.style.left = "39px";
-    arrow.style.top = bow.offsetTop + "px";
+    arrow.style.top = bow.offsetTop - (arrow.offsetHeight / 2) + "px";
+    arrow.style.left = bow.offsetLeft + 40 + "px";
+    reload();
+  }
+
+  /* ANIMATIONS */
+  function reload() {
+    let i = 1;
+    let arrowOffset;
+
+    reloadInt = setInterval(() => {
+      if (i >= 6)
+        clearInterval(reloadInt);
+      bowImage.src = "sprites/bow" + i + ".png";
+      if (i == 1)
+        arrowOffset = 0;
+      else if (i == 2)
+        arrowOffset = 8;
+      else if (i == 3)
+        arrowOffset = 8;
+      else if (i == 4)
+        arrowOffset = 9;
+      else if (i == 5)
+        arrowOffset = 8;
+      else if (i == 6)
+        arrowOffset = 7;
+      
+      arrow.style.left = arrow.offsetLeft - arrowOffset + "px";
+      i++;
+    }, 25);
+  }
+
+  function shoot() {
+    let i = 6;
+    let arrowOffset;
+
+    reloadInt = setInterval(() => {
+      if (i <= 1)
+        clearInterval(reloadInt);
+      bowImage.src = "sprites/bow" + i + ".png";
+      if (i == 1)
+        arrowOffset = 0;
+      else if (i == 2)
+        arrowOffset = 8;
+      else if (i == 3)
+        arrowOffset = 8;
+      else if (i == 4)
+        arrowOffset = 9;
+      else if (i == 5)
+        arrowOffset = 8;
+      else if (i == 6)
+        arrowOffset = 7;
+      
+      arrow.style.left = arrow.offsetLeft - arrowOffset + "px";
+      i--;
+    }, 18);
   }
 
   runGame();
