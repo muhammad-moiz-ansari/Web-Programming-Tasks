@@ -79,6 +79,15 @@
     box-shadow: 0 1px 4px 2.5px rgba(0, 0, 0, 0.299);
   }
 
+  #incScore {
+    font-size: 24px;
+    font-weight: 600;
+    padding: 0px;
+    margin: 10px;
+    transition: all 0.5s ease-in-out;
+    opacity: 0;
+  }
+
   #gameArea {
     position: relative;
     width: 100%;
@@ -108,7 +117,7 @@
 
   #target {
     position: absolute;
-    top: 277px;
+    top: 48%;/*287px;*/
     right: 50px;
     width: 50px;
     height: 110px;
@@ -126,6 +135,7 @@
     <div class="displayBoard">
       <div id="timer">Time: 60 s</div>
       <div id="score">Score: 0</div>
+      <p id="incScore"></p>
     </div>
     <div class="arrowCount">
       <img id="bagImg" src="sprites/bag1.png" alt="" style="width: 100%; height: 100%; position: left;">
@@ -153,8 +163,14 @@
   const timeDisplay = document.getElementById("timer");
   const arrowCountDisplay = document.getElementById("arrowCount");
   const bagImage = document.getElementById("bagImg");
+  const scoreInc = document.getElementById("incScore")
 
-  /* VARIABLES */
+  ///////////////////
+  //               //
+  /*   VARIABLES   */
+  //               //
+  ///////////////////
+
   // Screen Displays
   let timeLeft = 60;
   let score = 0;
@@ -221,20 +237,24 @@
   }
 
   function updateScore(areaHit) {
+    let scoreIncrement;
     if (areaHit == 1)
-      score += 5;
+      scoreIncrement = 5;
     else if (areaHit == 2)
-      score += 10;
+      scoreIncrement = 10;
     else if (areaHit == 3)
-      score += 15;
+      scoreIncrement = 15;
     else if (areaHit == 4)
-      score += 30;
+      scoreIncrement = 30;
     else if (areaHit == 5)
-      score += 50;
+      scoreIncrement = 50;
     else
-      score += 1;
+      scoreIncrement = 1;
     
+    score += scoreIncrement;
     scoreDisplay.textContent = "Score: " + score;
+    scoreInc.textContent = "+ " + scoreIncrement + "pts";
+    scoreInc.style.opacity = 1;
   }
 
   function updateArrowCount() {
@@ -252,7 +272,7 @@
   function endGame() {
     if (!gameOver) return;
     resetArrow();
-    target.style.top = (window.innerHeight - target.offsetHeight) / 2 + "px"; //"253px";
+    target.style.top = bow.offsetTop - (target.offsetHeight / 2) + "px"; //"253px";
     arrowPinned = false;
     arrowMoving = false;
     alert("Game Over! Your final score is: " + score);
@@ -267,6 +287,7 @@
     if (arrowPinned) {
       resetArrow();
       arrowPinned = false;
+      scoreInc.style.opacity = 0;
       return;
     }
     
@@ -305,6 +326,8 @@
     let isGameFinished = gameOver || arrowCount <= 0;
 
     if (isGameFinished && tempEndGame && arrowMoving == false) {
+      // wait 2 seconds
+      scoreInc.style.opacity = 0;
       gameOver = true;
       tempEndGame = false;
       endGame();
@@ -314,6 +337,9 @@
 
   function checkInnerCollision(arrowTip) {
     let targetTop = target.offsetTop
+    let originalH = 634;
+    let fact = originalH / target.offsetHeight;
+    /*
     let w1 = targetTop;
     let wb1 = targetTop + 9.35;
     let bbl1 = targetTop + 19.74;
@@ -324,6 +350,19 @@
     let bbl2 = targetTop + 89.9;
     let wb2 = targetTop + 100.47;
     let w2 = targetTop + target.offsetHeight;
+    */
+
+    let w1 = targetTop;
+    let wb1 = targetTop + (54 / fact);
+    let bbl1 = targetTop + (115 / fact);
+    let blr1 = targetTop + (182 / fact);
+    let ry1 = targetTop + (249 / fact);
+    let ry2 = targetTop + (385 / fact);
+    let blr2 = targetTop + (451 / fact);
+    let bbl2 = targetTop + (519 / fact);
+    let wb2 = targetTop + (579 / fact);
+    let w2 = targetTop + target.offsetHeight;
+
     let whiteHit = (arrowTip >= w1 && arrowTip <= wb1) || (arrowTip >= wb2 && arrowTip <= w2);
     let blackHit = (arrowTip >= wb1 && arrowTip <= bbl1) || (arrowTip >= bbl2 && arrowTip <= wb2);
     let blueHit = (arrowTip >= bbl1 && arrowTip <= blr1) || (arrowTip >= blr2 && arrowTip <= bbl2);
@@ -347,7 +386,7 @@
   function resetArrow() {
     arrowMoving = false;
     arrow.style.left = "39px";
-    arrow.style.top = (bow.offsetTop + 0) + "px";
+    arrow.style.top = bow.offsetTop + "px";
   }
 
   runGame();
