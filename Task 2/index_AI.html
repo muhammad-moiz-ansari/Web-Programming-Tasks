@@ -7,7 +7,7 @@
 
 <style>
   :root {
-    --bg-color: skyblue;
+    
   }
 
   body {
@@ -16,23 +16,16 @@
     font-family: Arial;
     user-select: none;
   }
-  
+
   .navbar {
     display: flex;
     justify-content: space-between;
   }
-  .target-scores {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    width: 170px;
-    height: 130px;
-  }
 
   .arrowCount {
     position: absolute;
-    top: 10px;
     right: 15px;
+    top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -82,47 +75,48 @@
   #gameArea {
     position: relative;
     width: 100%;
-    height: 100vh;
+    height: 90vh;
     overflow: hidden;
   }
 
+  /* Bow */
   #bow {
     position: absolute;
-    top: 55%;
     left: 50px;
+    top: 55%;
     font-size: 80px;
     color: rgb(105, 71, 34);
     width: 40px;
     height: 130px;
-    transform: translateY(-50%);  /* To bring bow's center equal to arrow's height */
+    transform: translateY(-50%);
   }
 
+  /* Arrow */
   #arrow {
     position: absolute;
-    top: 55%;
-    left: 39px;
+    left: 80px;
+    top: 50%;
     width: 85px;
     height: 9px;
     display: block;
   }
 
+  /* Target */
   #target {
     position: absolute;
-    top: 255px;
     right: 50px;
+    top: 253px;
     width: 50px;
     height: 110px;
     border-radius: 50%;
-    background-color: white;
+    background: white;
   }
-
 </style>
 </head>
+
 <body>
+
   <div class="navbar">
-    <div class="target-scores">
-      <img src="sprites/target_scores.png" alt="target scores" style="width: 100%; height: 100%; position: left;">
-    </div>
     <div class="displayBoard">
       <div id="timer">Time: 60 s</div>
       <div id="score">Score: 0</div>
@@ -154,36 +148,26 @@
   const arrowCountDisplay = document.getElementById("arrowCount");
   const bagImage = document.getElementById("bagImg");
 
-  /* VARIABLES */
-  // Screen Displays
+  let gameOver = 0;
   let timeLeft = 60;
   let score = 0;
-  let arrowCount = 3;
-
-  // Booleans
-  let tempEndGame = true;
-  let gameOver = false;
+  let arrowCount = 10;
   let arrowMoving = false;
   let arrowPinned = false;
-
   let targetDirection = 1;
-
-  // Speeds
   let targetSpeed = 80;
   let targetMoveTime = 100 - targetSpeed;
-  let arrowSpeed = 20;
-  
-  // MAIN Function
+  let tempEndGame = 1;
+
   function runGame() {
-    setTimeAndArrows();
+    setTime();
     startTimer();
     resetArrow();
     moveTarget();
   }
 
-  function setTimeAndArrows() {
+  function setTime() {
     timeDisplay.textContent = "Time: " + timeLeft + " s";
-    arrowCountDisplay.textContent = arrowCount;
   }
 
   function startTimer() {
@@ -192,28 +176,23 @@
       if (timeLeft > 0)
         timeLeft -= 1;
       else {
-        gameOver = true;
+        gameOver = 1;
         endGame();
       }
       timeDisplay.textContent = "Time: " + timeLeft + " s";
     }, 1000);
   }
-
+  
   function moveTarget() {
+    /* Move target continuously */
     setInterval(() => {
       if (gameOver) return;
-      let extraMargin = 110;
-      let topBorder = 0 + extraMargin;
-      let bottomBorder = window.innerHeight - extraMargin + 75;
-      let targetTop = target.offsetTop;
-      let targetBottom = targetTop + target.offsetHeight;
-
-      if(targetTop <= topBorder)
-        targetDirection = 1;
-      else if (targetBottom >= bottomBorder)
-        targetDirection = -1;
-
-      target.style.top = target.offsetTop + (5 * targetDirection) + "px";
+      let top = target.offsetTop;
+      let topMargin = 100;
+      if (top <= 0 + topMargin || top >= window.innerHeight - (80 + topMargin)) {
+        targetDirection *= -1;
+      }
+      target.style.top = top + (5 * targetDirection) + "px";
       if (arrowPinned) {
         arrow.style.top = arrow.offsetTop + (5 * targetDirection) + "px";
       }
@@ -226,7 +205,7 @@
   }
 
   function updateArrowCount() {
-    if (arrowCount > 0) arrowCount--;
+    arrowCount--;
     arrowCountDisplay.textContent = arrowCount;
 
     if (arrowCount == 2)
@@ -235,6 +214,10 @@
       bagImage.src = "sprites/bag3.png";
     else if (arrowCount == 0)
       bagImage.src = "sprites/bag4.png";
+
+    if (arrowCount <= 0) {
+      gameOver = 1;
+    }
   }
 
   function endGame() {
@@ -246,9 +229,9 @@
     alert("Game Over! Your final score is: " + score);
   }
 
-  /* Shooting Arrow Click Handled */
+  /* Shoot arrow on click */
   document.addEventListener("click", () => {
-    if (gameOver || arrowCount <= 0) return;
+    if (gameOver) return;
     if (arrowMoving) return;
 
     // Reloads arrow if already pinned to target
@@ -261,43 +244,38 @@
     arrowMoving = true;
     updateArrowCount();
 
-    arrowInterval = setInterval(() => {
-      let arrowTip = arrow.offsetLeft + arrow.offsetWidth;
-      let targetTop = target.offsetTop;
-      let targetBottom = targetTop + target.offsetHeight;
-      let targetSurface = target.offsetLeft + (target.offsetWidth / 2) - 20;
+    let arrowInterval = setInterval(() => {
+      let arrowLeft = arrow.offsetLeft;
       arrow.style.left = arrow.offsetLeft + 15 + "px";
+      let hitboxOffset = (target.offsetWidth / 2) - 7;  // Adjust hitbox for better accuracy
 
-      // Check Collision
-      if (arrowTip >= targetSurface &&
-          arrowTip <= targetSurface + 15 &&
-          arrow.offsetTop >= targetTop &&
-          arrow.offsetTop + arrow.offsetHeight <= targetBottom
+      /* Collision detection */
+      let arrowTip = arrow.offsetLeft + arrow.offsetWidth;
+      if (
+        arrowTip >= target.offsetLeft + hitboxOffset &&
+        arrowTip <= target.offsetLeft + hitboxOffset + 15 &&
+        arrow.offsetTop >= target.offsetTop &&
+        arrow.offsetTop + arrow.offsetHeight <= target.offsetTop + target.offsetHeight
       ) {
         updateScore();
+        //resetArrow();
         arrowMoving = false;
         arrowPinned = true;
         clearInterval(arrowInterval);
       }
 
-      // Arrow out of bounds
+      /* Arrow out of screen */
       if (arrow.offsetLeft > window.innerWidth) {
         resetArrow();
         clearInterval(arrowInterval);
       }
-    }, arrowSpeed);
-  });
-  
-  gameOverInterval = setInterval(() => {
-    let isGameFinished = gameOver || arrowCount <= 0;
 
-    if (isGameFinished && tempEndGame && arrowMoving == false) {
-      gameOver = true;
-      tempEndGame = false;
-      endGame();
-      clearInterval(gameOverInterval);
-    }
-  }, 50);
+      if (gameOver && tempEndGame) {
+        tempEndGame = 1;
+        endGame();
+      }
+    }, 20);
+  });
 
   function resetArrow() {
     arrowMoving = false;
@@ -307,5 +285,6 @@
 
   runGame();
 </script>
+
 </body>
 </html>

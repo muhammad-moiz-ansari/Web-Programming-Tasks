@@ -1,2 +1,1 @@
-make 4 sprites of bag:
-one with full arrows, with one less arrow, with one arrow, empty bag
+make sprites or bow animation
