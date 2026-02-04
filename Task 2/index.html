@@ -109,7 +109,7 @@
   #arrow {
     position: absolute;
     top: 55%;
-    left: 39px;
+    left: 64px;
     width: 91px;
     height: 9px;
     display: block;
@@ -151,7 +151,7 @@
       <img src="sprites/arrow.png" alt="=======" style="width: 100%; height: 100%; position: inherit;">
     </div>
     <div id="bow">
-      <img id="bowImg" src="sprites/bow2.png" alt="}" style="width: 100%; height: 100%; position: inherit;">
+      <img id="bowImg" src="sprites/bow1.png" alt="}" style="width: 100%; height: 100%; position: inherit;">
     </div>
   </div>
 
@@ -182,12 +182,16 @@
   let gameOver = false;
   let arrowMoving = false;
   let arrowPinned = false;
+  let shootAnimation = false;
+  let reloadAnimation = false;
 
   let targetDirection = 1;
+  let nextTarget = 50;  // The score where difficulty will increase
+  let moveInterval;
 
   // Speeds
-  let targetSpeed = 80;
-  let targetMoveTime = 100 - targetSpeed;
+  let targetSpeed = 41;
+  let targetMoveTime = 60 - targetSpeed;
   let arrowSpeed = 20;
   
   // MAIN Function
@@ -196,6 +200,7 @@
     startTimer();
     resetArrow();
     moveTarget();
+    increaseDifficulty();
   }
 
   function setTimeAndArrows() {
@@ -217,7 +222,7 @@
   }
 
   function moveTarget() {
-    setInterval(() => {
+    moveInterval = setInterval(() => {
       if (gameOver) return;
       let extraMargin = 110;
       let topBorder = 0 + extraMargin;
@@ -270,6 +275,21 @@
       bagImage.src = "sprites/bag4.png";
   }
 
+  function increaseDifficulty() {
+    setInterval(() => {
+      if (score >= nextTarget) {
+        nextTarget += 50;
+        targetSpeed += 5;
+        console.log(targetSpeed);
+        targetMoveTime = 60 - targetSpeed;
+        clearInterval(moveInterval);
+        moveTarget();
+  
+        target.style.height = target.offsetHeight - 10;
+      }
+    }, 50);
+  }
+
   function endGame() {
     if (!gameOver) return;
     resetArrow();
@@ -294,20 +314,22 @@
     
     arrowMoving = true;
     updateArrowCount();
-    shoot();
+    if (!shootAnimation && !reloadAnimation)
+      shoot();
 
     arrowInterval = setInterval(() => {
-      let arrowTip = arrow.offsetLeft + arrow.offsetWidth;
+      let arrowTipX = arrow.offsetLeft + arrow.offsetWidth;
+      let arrowTipY = arrow.offsetTop + (arrow.offsetHeight / 2);
       let targetTop = target.offsetTop;
       let targetBottom = targetTop + target.offsetHeight;
       let targetSurface = target.offsetLeft + (target.offsetWidth / 2) - 20;
       arrow.style.left = arrow.offsetLeft + 15 + "px";
 
       // Check Collision
-      if (arrowTip >= targetSurface &&
-          arrowTip <= targetSurface + 15 &&
-          arrow.offsetTop >= targetTop &&
-          arrow.offsetTop + arrow.offsetHeight <= targetBottom
+      if (arrowTipX >= targetSurface &&
+          arrowTipX <= targetSurface + 15 &&
+          arrowTipY >= targetTop &&
+          arrowTipY <= targetBottom
       ) {
         let areaHit = checkInnerCollision(arrow.offsetTop + (arrow.offsetHeight / 2));
         updateScore(areaHit);
@@ -389,17 +411,21 @@
     arrowMoving = false;
     arrow.style.top = bow.offsetTop - (arrow.offsetHeight / 2) + "px";
     arrow.style.left = bow.offsetLeft + 40 + "px";
-    reload();
+    if(!reloadAnimation && !shootAnimation)
+      reload();
   }
 
   /* ANIMATIONS */
   function reload() {
+    reloadAnimation = true;
     let i = 1;
     let arrowOffset;
 
     reloadInt = setInterval(() => {
-      if (i >= 6)
+      if (i >= 6) {
         clearInterval(reloadInt);
+        reloadAnimation = false;
+      }
       bowImage.src = "sprites/bow" + i + ".png";
       if (i == 1)
         arrowOffset = 0;
@@ -420,12 +446,15 @@
   }
 
   function shoot() {
+    shootAnimation = true;
     let i = 6;
     let arrowOffset;
 
     reloadInt = setInterval(() => {
-      if (i <= 1)
+      if (i <= 1) {
         clearInterval(reloadInt);
+        shootAnimation = false;
+      }
       bowImage.src = "sprites/bow" + i + ".png";
       if (i == 1)
         arrowOffset = 0;
