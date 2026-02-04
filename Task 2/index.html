@@ -108,7 +108,7 @@
 
   #target {
     position: absolute;
-    top: 255px;
+    top: 277px;
     right: 50px;
     width: 50px;
     height: 110px;
@@ -158,7 +158,7 @@
   // Screen Displays
   let timeLeft = 60;
   let score = 0;
-  let arrowCount = 3;
+  let arrowCount = 10;
 
   // Booleans
   let tempEndGame = true;
@@ -220,8 +220,20 @@
     }, targetMoveTime);
   }
 
-  function updateScore() {
-    score++;
+  function updateScore(areaHit) {
+    if (areaHit == 1)
+      score += 5;
+    else if (areaHit == 2)
+      score += 10;
+    else if (areaHit == 3)
+      score += 15;
+    else if (areaHit == 4)
+      score += 30;
+    else if (areaHit == 5)
+      score += 50;
+    else
+      score += 1;
+    
     scoreDisplay.textContent = "Score: " + score;
   }
 
@@ -274,7 +286,8 @@
           arrow.offsetTop >= targetTop &&
           arrow.offsetTop + arrow.offsetHeight <= targetBottom
       ) {
-        updateScore();
+        let areaHit = checkInnerCollision(arrow.offsetTop + (arrow.offsetHeight / 2));
+        updateScore(areaHit);
         arrowMoving = false;
         arrowPinned = true;
         clearInterval(arrowInterval);
@@ -298,6 +311,38 @@
       clearInterval(gameOverInterval);
     }
   }, 50);
+
+  function checkInnerCollision(arrowTip) {
+    let targetTop = target.offsetTop
+    let w1 = targetTop;
+    let wb1 = targetTop + 9.35;
+    let bbl1 = targetTop + 19.74;
+    let blr1 = targetTop + 31.35;
+    let ry1 = targetTop + 43.13;
+    let ry2 = targetTop + 66.52;
+    let blr2 = targetTop + 78.13;
+    let bbl2 = targetTop + 89.9;
+    let wb2 = targetTop + 100.47;
+    let w2 = targetTop + target.offsetHeight;
+    let whiteHit = (arrowTip >= w1 && arrowTip <= wb1) || (arrowTip >= wb2 && arrowTip <= w2);
+    let blackHit = (arrowTip >= wb1 && arrowTip <= bbl1) || (arrowTip >= bbl2 && arrowTip <= wb2);
+    let blueHit = (arrowTip >= bbl1 && arrowTip <= blr1) || (arrowTip >= blr2 && arrowTip <= bbl2);
+    let redHit = (arrowTip >= blr1 && arrowTip <= ry1) || (arrowTip >= ry2 && arrowTip <= blr2);
+    let yellowHit = arrowTip >= ry1 && arrowTip <= ry2;
+
+    if (whiteHit)
+      return 1;
+    else if (blackHit)
+      return 2;
+    else if (blueHit)
+      return 3;
+    else if (redHit)
+      return 4;
+    else if (yellowHit)
+      return 5;
+    else
+      return 6;
+  }
 
   function resetArrow() {
     arrowMoving = false;
