@@ -85,7 +85,7 @@
   // Defaults
   let defTargetSpeed = 41;
   let defTHeight = 110;
-  let defArrowSpeed = 20;
+  let defArrowSpeed = 16;
   let defTime = 60;
   let defArrowCount = 15;
 
@@ -106,7 +106,7 @@
   let targetDirection = 1;
   let nextTarget = 50;  // The score where difficulty will increase
   let stretchVal = 6;
-  let angle, dy, dx;
+  let angle, angleRad, dy, dx;
 
   // Speeds
   let targetSpeed = defTargetSpeed;
@@ -258,7 +258,7 @@
     else if (areaHit == 5)
       scoreIncrement = 50;
     else
-      scoreIncrement = 1;
+      scoreIncrement = 5;
     
     score += scoreIncrement;
     scoreDisplay.textContent = "Score: " + score;
@@ -480,6 +480,8 @@
       if (arrowMoving) return;
 
       if (!dragDistance || dragDistance < 10) {
+        angle = 0;
+        angleRad = 0;
         setPower(40); // Minimum power for a quick click
       }
       
@@ -495,8 +497,8 @@
         let targetTop = target.offsetTop;
         let targetBottom = targetTop + target.offsetHeight;
         let targetSurface = target.offsetLeft + (target.offsetWidth / 2) - 20;
-        arrow.style.left = arrow.offsetLeft + (dx * 0.3) + "px";
-        arrow.style.top = arrow.offsetTop + (dy * 0.3) + "px";
+        arrow.style.left = arrow.offsetLeft + (Math.cos(angleRad) * 15) + "px";
+        arrow.style.top = arrow.offsetTop + (Math.sin(angleRad) * 15) + "px";
 
         // Check Collision
         if (arrowTipX >= targetSurface &&
@@ -504,11 +506,22 @@
             arrowTipY >= targetTop &&
             arrowTipY <= targetBottom
         ) {
-          let areaHit = checkInnerCollision(arrow.offsetTop + (arrow.offsetHeight / 2));
+          // Fix arrow tilt offset
+          let aCenterX = arrow.offsetLeft + (arrow.offsetWidth / 2);
+          let aCenterY = arrow.offsetTop + (arrow.offsetHeight / 2);
+
+          // 2. Calculate the Tip's Y position using Sine
+          // Multiply half the width (c side of right triangle) by the Sine of the angle
+          let adjustedArrowTipY = aCenterY + (Math.sin(angleRad) * (arrow.offsetWidth / 2));
+          
+          console.log("Adjusted y: ", adjustedArrowTipY);
+          console.log("Original y: ", arrowTipY);
+
+          let areaHit = checkInnerCollision(adjustedArrowTipY);
           updateScore(areaHit);
           arrowMoving = false;
           arrowPinned = true;
-          //resetArrow();
+          resetArrow();
           clearInterval(arrowInterval);
         }
 
@@ -599,9 +612,10 @@
     let bowRect = bow.getBoundingClientRect();
     let bowX = bowRect.left + (bowRect.width / 2);
     let bowY = bowRect.top + (bowRect.height / 2);
-    dx = e.clientX - bowX;
-    dy = e.clientY - bowY;
-    angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    dx = - e.clientX + x1;
+    dy = - e.clientY + y1;
+    angleRad = Math.atan2(dy, dx);
+    angle = angleRad * (180 / Math.PI);
     console.log("Angle: " + angle);
 
     arrow.style.transform = "rotate(" + angle + "deg)";
