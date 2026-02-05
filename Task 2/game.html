@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Precision Shot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+<link rel="icon" href="sprites/favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <img id="bg-img" src="sprites/bg-game.png" alt="">
+  <div class="navbar">
+    <div class="target-scores">
+      <img src="sprites/target_scores.png" alt="target scores" style="width: 100%; height: 100%; position: left;">
+    </div>
+    <div class="displayBoard">
+      <div id="timer">Time: 60 s</div>
+      <div id="score">Score: 0</div>
+      <p id="incScore"></p>
+    </div>
+    <div class="arrowCount">
+      <img id="bagImg" src="sprites/bag1.png" alt="" style="width: 100%; height: 100%; position: left;">
+      <p id="arrowCount" style="width: 200px">10</p>
+    </div>
+  </div>
+
+  <div id="gameArea">
+    <div id="target">
+      <img src="sprites/target.png" alt="" style="width: 100%; height: 100%; position: inherit;">
+    </div>
+    <div id="arrow">
+      <img src="sprites/arrow.png" alt="=======" style="width: 100%; height: 100%; position: inherit;">
+    </div>
+    <div id="bow">
+      <img src="sprites/bow1.png" alt="}" style="width: 100%; height: 100%; position: inherit;">
+    </div>
+
+    <div id="gameOverMenu">
+      <img id="menu-bg" src="sprites/menu-bg.png" alt="">
+      <h1>Game Over!</h1>
+      <button onclick="restartGame()">Restart</button>
+      <button onclick="window.location.href='index.html'">Main Menu</button>
+      <button onclick="exitGame()">Exit</button>
+    </div>
+  </div>
+
+<script>
+  const buttons = document.getElementsByTagName("button");
+
+  const arrow = document.getElementById("arrow");
+  const target = document.getElementById("target");
+  const bow = document.getElementById("bow");
+  const scoreDisplay = document.getElementById("score");
+  const timeDisplay = document.getElementById("timer");
+  const arrowCountDisplay = document.getElementById("arrowCount");
+  const scoreInc = document.getElementById("incScore");
+  const bagImage = document.getElementById("bagImg");
+  const bowImage = document.querySelector("#bow img");
+
+  // Game Over Menu
+  const endMenu = document.getElementById("gameOverMenu");
+
+
+  ///////////////////
+  //               //
+  /*   VARIABLES   */
+  //               //
+  ///////////////////
+
+  // Defaults
+  let defSpeed = 41;
+  let defArrowSpeed = 20;
+  let defTime = 6;
+  let defArrowCount = 1;
+
+  // Screen Displays
+  let timeLeft = defTime;
+  let score = 0;
+  let arrowCount = defArrowCount;
+
+  // Booleans
+  let gameEnded = false;
+  let tempEndGame = true;
+  let gameOver = false;
+  let arrowMoving = false;
+  let arrowPinned = false;
+  let shootAnimation = false;
+  let reloadAnimation = false;
+
+  let targetDirection = 1;
+  let nextTarget = 50;  // The score where difficulty will increase
+
+  // Speeds
+  let targetSpeed = defSpeed;
+  let targetMoveTime = 60 - targetSpeed;
+  let arrowSpeed = defArrowSpeed;
+
+  // Intervals
+  let startTimerInterval;
+  let moveInterval;
+  let difficultyInterval;
+
+  
+  // MAIN Function
+  function runGame() {
+    endMenu.style.display = "none";
+    setTimeAndArrows();
+    startTimer();
+    resetArrow();
+    target.style.top = bow.offsetTop - (target.offsetHeight / 2) + "px";
+    moveTarget();
+    increaseDifficulty();
+    checkGameOver();
+  }
+
+  function endGame() {
+    if (!gameOver) return;
+    //resetArrow();
+    //target.style.top = bow.offsetTop - (target.offsetHeight / 2) + "px";
+    arrowPinned = false;
+    arrowMoving = false;
+    gameEnded = true;
+
+    gameOverMenu();
+  }
+
+  function gameOverMenu() {
+    endMenu.style.display = "flex";
+    if (timeLeft <= 0)
+      endMenu.querySelector("h1").textContent = "Time Over!";
+    else if (arrowCount <= 0)
+      endMenu.querySelector("h1").textContent = "You ran out of arrows!";
+    //endMenu.style.left = (window.innerWidth / 2) - (endMenu.offsetWidth / 2) + "px";
+    //endMenu.style.top = (window.innerHeight / 2) - (endMenu.offsetHeight / 2) + "px";
+  }
+
+  function restartGame() {
+    // VARIABLES
+    // Screen Displays
+    timeLeft = defTime;
+    score = 0;
+    arrowCount = defArrowCount;
+    // Booleans
+    tempEndGame = true;
+    gameOver = false;
+    arrowMoving = false;
+    arrowPinned = false;
+    shootAnimation = false;
+    reloadAnimation = false;
+    targetDirection = 1;
+    // Speeds
+    targetSpeed = defSpeed;
+    targetMoveTime = 60 - targetSpeed;
+    arrowSpeed = defArrowSpeed;
+
+    // RESET INTERVALS 
+    clearInterval(startTimerInterval);
+    clearInterval(moveInterval);
+    clearInterval(difficultyInterval);
+    
+    runGame();
+  }
+
+  function exitGame() {
+    window.location.href = "https://www.google.com";
+  }
+
+  function setTimeAndArrows() {
+    timeDisplay.textContent = "Time: " + timeLeft + " s";
+    arrowCountDisplay.textContent = arrowCount;
+  }
+
+  function startTimer() {
+    startTimerInterval = setInterval(() => {
+      if (gameOver) return;
+      if (timeLeft > 0)
+        timeLeft -= 1;
+      else {
+        gameOver = true;
+        endGame();
+      }
+      timeDisplay.textContent = "Time: " + timeLeft + " s";
+    }, 1000);
+  }
+
+  function moveTarget() {
+    moveInterval = setInterval(() => {
+      if (gameOver) return;
+      let extraMargin = 110;
+      let topBorder = 0 + extraMargin;
+      let bottomBorder = window.innerHeight - extraMargin + 75;
+      let targetTop = target.offsetTop;
+      let targetBottom = targetTop + target.offsetHeight;
+
+      if(targetTop <= topBorder)
+        targetDirection = 1;
+      else if (targetBottom >= bottomBorder)
+        targetDirection = -1;
+
+      target.style.top = target.offsetTop + (5 * targetDirection) + "px";
+      if (arrowPinned) {
+        arrow.style.top = arrow.offsetTop + (5 * targetDirection) + "px";
+      }
+    }, targetMoveTime);
+  }
+
+  function updateScore(areaHit) {
+    let scoreIncrement;
+    if (areaHit == 1)
+      scoreIncrement = 5;
+    else if (areaHit == 2)
+      scoreIncrement = 10;
+    else if (areaHit == 3)
+      scoreIncrement = 15;
+    else if (areaHit == 4)
+      scoreIncrement = 30;
+    else if (areaHit == 5)
+      scoreIncrement = 50;
+    else
+      scoreIncrement = 1;
+    
+    score += scoreIncrement;
+    scoreDisplay.textContent = "Score: " + score;
+    scoreInc.textContent = "+ " + scoreIncrement + "pts";
+    scoreInc.style.opacity = 1;
+  }
+
+  function updateArrowCount() {
+    if (arrowCount > 0) arrowCount--;
+    arrowCountDisplay.textContent = arrowCount;
+
+    if (arrowCount == 2)
+      bagImage.src = "sprites/bag2.png";
+    else if (arrowCount == 1)
+      bagImage.src = "sprites/bag3.png";
+    else if (arrowCount == 0)
+      bagImage.src = "sprites/bag4.png";
+  }
+
+  function increaseDifficulty() {
+    difficultyInterval = setInterval(() => {
+      if (score >= nextTarget) {
+        nextTarget += 50;
+        targetSpeed += 5;
+        console.log(targetSpeed);
+        targetMoveTime = 60 - targetSpeed;
+        clearInterval(moveInterval);
+        moveTarget();
+  
+        target.style.height = target.offsetHeight - 10 + "px";
+      }
+    }, 50);
+  }
+
+  /* Shooting Arrow Click Handled */
+  document.addEventListener("click", () => {
+    if (gameOver || arrowCount <= 0) return;
+    if (gameEnded) {
+      gameEnded = false;
+      return;
+    }
+    if (arrowMoving) return;
+
+    // Reloads arrow if already pinned to target
+    if (arrowPinned) {
+      resetArrow();
+      arrowPinned = false;
+      scoreInc.style.opacity = 0;
+      return;
+    }
+    
+    arrowMoving = true;
+    updateArrowCount();
+    if (!shootAnimation && !reloadAnimation)
+      shoot();
+
+    arrowInterval = setInterval(() => {
+      let arrowTipX = arrow.offsetLeft + arrow.offsetWidth;
+      let arrowTipY = arrow.offsetTop + (arrow.offsetHeight / 2);
+      let targetTop = target.offsetTop;
+      let targetBottom = targetTop + target.offsetHeight;
+      let targetSurface = target.offsetLeft + (target.offsetWidth / 2) - 20;
+      arrow.style.left = arrow.offsetLeft + 15 + "px";
+
+      // Check Collision
+      if (arrowTipX >= targetSurface &&
+          arrowTipX <= targetSurface + 15 &&
+          arrowTipY >= targetTop &&
+          arrowTipY <= targetBottom
+      ) {
+        let areaHit = checkInnerCollision(arrow.offsetTop + (arrow.offsetHeight / 2));
+        updateScore(areaHit);
+        arrowMoving = false;
+        arrowPinned = true;
+        clearInterval(arrowInterval);
+      }
+
+      // Arrow out of bounds
+      if (arrow.offsetLeft > window.innerWidth) {
+        resetArrow();
+        clearInterval(arrowInterval);
+      }
+    }, arrowSpeed);
+  });
+  
+  function checkGameOver() {
+    gameOverInterval = setInterval(() => {
+      let isGameFinished = gameOver || arrowCount <= 0;
+      
+      if (isGameFinished && tempEndGame && arrowMoving == false) {
+        console.log(isGameFinished, tempEndGame, arrowMoving);
+        // wait 2 seconds
+        scoreInc.style.opacity = 0;
+        gameOver = true;
+        tempEndGame = false;
+        endGame();
+        clearInterval(gameOverInterval);
+      }
+    }, 50);
+  }
+
+  function checkInnerCollision(arrowTip) {
+    let targetTop = target.offsetTop
+    let originalH = 634;
+    let fact = originalH / target.offsetHeight;
+
+    let w1 = targetTop;
+    let wb1 = targetTop + (54 / fact);
+    let bbl1 = targetTop + (115 / fact);
+    let blr1 = targetTop + (182 / fact);
+    let ry1 = targetTop + (249 / fact);
+    let ry2 = targetTop + (385 / fact);
+    let blr2 = targetTop + (451 / fact);
+    let bbl2 = targetTop + (519 / fact);
+    let wb2 = targetTop + (579 / fact);
+    let w2 = targetTop + target.offsetHeight;
+
+    let whiteHit = (arrowTip >= w1 && arrowTip <= wb1) || (arrowTip >= wb2 && arrowTip <= w2);
+    let blackHit = (arrowTip >= wb1 && arrowTip <= bbl1) || (arrowTip >= bbl2 && arrowTip <= wb2);
+    let blueHit = (arrowTip >= bbl1 && arrowTip <= blr1) || (arrowTip >= blr2 && arrowTip <= bbl2);
+    let redHit = (arrowTip >= blr1 && arrowTip <= ry1) || (arrowTip >= ry2 && arrowTip <= blr2);
+    let yellowHit = arrowTip >= ry1 && arrowTip <= ry2;
+
+    if (whiteHit)
+      return 1;
+    else if (blackHit)
+      return 2;
+    else if (blueHit)
+      return 3;
+    else if (redHit)
+      return 4;
+    else if (yellowHit)
+      return 5;
+    else
+      return 6;
+  }
+
+  function resetArrow() {
+    arrowMoving = false;
+    arrow.style.top = bow.offsetTop - (arrow.offsetHeight / 2) + "px";
+    arrow.style.left = bow.offsetLeft + 40 + "px";
+    if(!reloadAnimation && !shootAnimation)
+      reload();
+  }
+
+  /* ANIMATIONS */
+  function reload() {
+    reloadAnimation = true;
+    let i = 1;
+    let arrowOffset;
+
+    reloadInt = setInterval(() => {
+      if (i >= 6) {
+        clearInterval(reloadInt);
+        reloadAnimation = false;
+      }
+      bowImage.src = "sprites/bow" + i + ".png";
+      if (i == 1)
+        arrowOffset = 0;
+      else if (i == 2)
+        arrowOffset = 8;
+      else if (i == 3)
+        arrowOffset = 8;
+      else if (i == 4)
+        arrowOffset = 9;
+      else if (i == 5)
+        arrowOffset = 8;
+      else if (i == 6)
+        arrowOffset = 7;
+      
+      arrow.style.left = arrow.offsetLeft - arrowOffset + "px";
+      i++;
+    }, 25);
+  }
+
+  function shoot() {
+    shootAnimation = true;
+    let i = 6;
+    let arrowOffset;
+
+    shootInt = setInterval(() => {
+      if (i <= 1) {
+        clearInterval(shootInt);
+        shootAnimation = false;
+      }
+      bowImage.src = "sprites/bow" + i + ".png";
+      if (i == 1)
+        arrowOffset = 0;
+      else if (i == 2)
+        arrowOffset = 8;
+      else if (i == 3)
+        arrowOffset = 8;
+      else if (i == 4)
+        arrowOffset = 9;
+      else if (i == 5)
+        arrowOffset = 8;
+      else if (i == 6)
+        arrowOffset = 7;
+      
+      arrow.style.left = arrow.offsetLeft - arrowOffset + "px";
+      i--;
+    }, 18);
+  }
+
+  runGame();
+</script>
+</body>
+</html>
