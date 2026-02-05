@@ -106,6 +106,7 @@
   let targetDirection = 1;
   let nextTarget = 50;  // The score where difficulty will increase
   let stretchVal = 6;
+  let angle, dy, dx;
 
   // Speeds
   let targetSpeed = defTargetSpeed;
@@ -365,6 +366,7 @@
 
   function resetArrow() {
     arrowMoving = false;
+    arrowPinned = false;
     arrow.style.top = bow.offsetTop - (arrow.offsetHeight / 2) + "px";
     arrow.style.left = bow.offsetLeft + 40 + "px";
     arrowSpeed = defArrowSpeed;
@@ -493,7 +495,8 @@
         let targetTop = target.offsetTop;
         let targetBottom = targetTop + target.offsetHeight;
         let targetSurface = target.offsetLeft + (target.offsetWidth / 2) - 20;
-        arrow.style.left = arrow.offsetLeft + 15 + "px";
+        arrow.style.left = arrow.offsetLeft + (dx * 0.3) + "px";
+        arrow.style.top = arrow.offsetTop + (dy * 0.3) + "px";
 
         // Check Collision
         if (arrowTipX >= targetSurface &&
@@ -505,6 +508,7 @@
           updateScore(areaHit);
           arrowMoving = false;
           arrowPinned = true;
+          //resetArrow();
           clearInterval(arrowInterval);
         }
 
@@ -520,10 +524,12 @@
   document.addEventListener("mousemove", (e) => {
     x2 = e.clientX;
     y2 = e.clientY;
+    if (isDragging)
+      updateAngles(e);
     if (x2 < x1 && isDragging) {
       dragDistance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 
-      console.log(dragDistance);
+      //console.log(dragDistance);
       setPower(dragDistance);
     }
   });
@@ -587,6 +593,19 @@
     powerBar.style.width = pwidth + "px";
     bowImage.src = "sprites/bow" + stretchVal + ".png";
     arrow.style.left = newALeft + "px";
+  }
+
+  function updateAngles(e) {
+    let bowRect = bow.getBoundingClientRect();
+    let bowX = bowRect.left + (bowRect.width / 2);
+    let bowY = bowRect.top + (bowRect.height / 2);
+    dx = e.clientX - bowX;
+    dy = e.clientY - bowY;
+    angle = Math.atan2(dy, dx) * (180 / Math.PI);
+    console.log("Angle: " + angle);
+
+    arrow.style.transform = "rotate(" + angle + "deg)";
+    bow.style.transform = "translateY(-50%) rotate(" + angle + "deg)";
   }
 
   runGame();
