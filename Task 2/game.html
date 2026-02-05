@@ -30,12 +30,16 @@
   <div id="gameOverMenu">
     <img id="menu-bg" src="sprites/menu-bg.png" alt="">
     <h1>Game Over!</h1>
+    <p id="endScore">Score: </p>
     <button onclick="restartGame()">Restart</button>
     <button onclick="window.location.href='index.html'">Main Menu</button>
     <button onclick="exitGame()">Exit</button>
   </div>
 
   <div id="gameArea">
+    <div id="powerBorder">
+      <div id="powerBar"></div>
+    </div>
     <div id="target">
       <img src="sprites/target.png" alt="" style="width: 100%; height: 100%; position: inherit;">
     </div>
@@ -66,16 +70,21 @@
 
   // Game Over Menu
   const endMenu = document.getElementById("gameOverMenu");
+  const endScore = document.getElementById("endScore");
+
+  const powerBorder = document.getElementById("powerBorder");
+  const powerBar = document.getElementById("powerBar");
 
 
   ///////////////////
   //               //
-  /*   VARIABLES   */
+  //   VARIABLES   //
   //               //
   ///////////////////
 
   // Defaults
-  let defSpeed = 41;
+  let defTargetSpeed = 41;
+  let defTHeight = 110;
   let defArrowSpeed = 20;
   let defTime = 60;
   let defArrowCount = 15;
@@ -96,9 +105,10 @@
 
   let targetDirection = 1;
   let nextTarget = 50;  // The score where difficulty will increase
+  let stretchVal = 6;
 
   // Speeds
-  let targetSpeed = defSpeed;
+  let targetSpeed = defTargetSpeed;
   let targetMoveTime = 60 - targetSpeed;
   let arrowSpeed = defArrowSpeed;
 
@@ -106,6 +116,15 @@
   let startTimerInterval;
   let moveInterval;
   let difficultyInterval;
+
+  // Arrow Positions
+  arrow.style.left = bow.offsetLeft + 40 + "px";
+  let al1 = arrow.offsetLeft;
+  let al2 = al1 - 8;
+  let al3 = al2 - 8;
+  let al4 = al3 - 9;
+  let al5 = al4 - 8;
+  let al6 = al5 - 7;
 
   
   // MAIN Function
@@ -138,6 +157,8 @@
     else if (arrowCount <= 0)
       endMenu.querySelector("h1").textContent = "You ran out of arrows!";
 
+    endScore.textContent = "Score: " + score;
+
     gameArea.classList.add("dimmed");
     navBar.classList.add("dimmed");
     bgImg.style.filter = "brightness(0.4)";
@@ -158,7 +179,7 @@
     reloadAnimation = false;
     targetDirection = 1;
     // Speeds
-    targetSpeed = defSpeed;
+    targetSpeed = defTargetSpeed;
     targetMoveTime = 60 - targetSpeed;
     arrowSpeed = defArrowSpeed;
 
@@ -166,6 +187,11 @@
     clearInterval(startTimerInterval);
     clearInterval(moveInterval);
     clearInterval(difficultyInterval);
+
+    ++arrowCount;
+    updateArrowCount();
+    scoreDisplay.textContent = "Score: " + score;
+    target.style.height = defTHeight + "px";
 
     gameArea.classList.remove("dimmed");
     navBar.classList.remove("dimmed");
@@ -372,8 +398,9 @@
     arrowMoving = false;
     arrow.style.top = bow.offsetTop - (arrow.offsetHeight / 2) + "px";
     arrow.style.left = bow.offsetLeft + 40 + "px";
-    if(!reloadAnimation && !shootAnimation)
-      reload();
+    if(!reloadAnimation && !shootAnimation) {
+      //reload();
+    }
   }
 
   /* ANIMATIONS */
@@ -383,7 +410,7 @@
     let arrowOffset;
 
     reloadInt = setInterval(() => {
-      if (i >= 6) {
+      if (i >= stretchVal) {
         clearInterval(reloadInt);
         reloadAnimation = false;
       }
@@ -408,7 +435,7 @@
 
   function shoot() {
     shootAnimation = true;
-    let i = 6;
+    let i = stretchVal;
     let arrowOffset;
 
     shootInt = setInterval(() => {
@@ -433,6 +460,82 @@
       arrow.style.left = arrow.offsetLeft - arrowOffset + "px";
       i--;
     }, 18);
+  }
+
+  ////////////////////////////////////
+  //                                //
+  //    MOUSE TRACKING FUNCTIONS    //
+  //                                //
+  ////////////////////////////////////
+
+  let isDragging = false;
+  let x1, y1, x2, y2, dragDistance;
+
+  document.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    x1 = e.clientX;
+    y1 = e.clientY;
+  });
+
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+  });
+
+  document.addEventListener("mousemove", (e) => {
+    x2 = e.clientX;
+    y2 = e.clientY;
+    if (x2 < x1 && isDragging) {
+      dragDistance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+
+      console.log(dragDistance);
+      setPower(dragDistance);
+    }
+  });
+
+  function initPowerBar() {
+    powerBar.style.width = 0 + "px";
+    powerBar.style.height = powerBorder.offsetHeight + "px";
+    powerBar.style.color = "green";
+  }
+
+  function setPower(dist) {
+    let pwidth;
+    let pdefW = powerBorder.offsetWidth - 10;
+    let arrowLeft = arrow.offsetLeft;
+    let newALeft;
+    if(dist >= 250) {
+      arrowSpeed = defArrowSpeed + 6;
+      stretchVal = 6;
+      pwidth = pdefW;
+      newALeft = al6;
+    }
+    else if (dist >= 200) {
+      arrowSpeed = defArrowSpeed + 4;
+      stretchVal = 5;
+      pwidth = pdefW * 0.7;
+      newALeft = al5;
+    }
+    else if (dist >= 150) {
+      arrowSpeed = defArrowSpeed + 2;
+      stretchVal = 4;
+      pwidth = pdefW * 0.5;
+      newALeft = al4;
+    }
+    else if (dist >= 100) {
+      arrowSpeed = defArrowSpeed;
+      stretchVal = 3;
+      pwidth = pdefW * 0.3;
+      newALeft = al3;
+    }
+    else if (dist >= 50) {
+      arrowSpeed = defArrowSpeed + 1;
+      stretchVal = 2;
+      pwidth = pdefW * 0.13;
+      newALeft = al2;
+    }
+    powerBar.style.width = pwidth + "px";
+    bowImage.src = "sprites/bow" + stretchVal + ".png";
+    arrow.style.left = newALeft + "px";
   }
 
   runGame();

@@ -7,7 +7,7 @@
 
   body {
     margin: 0;
-    background: skyblue;
+    background: rgba(201, 184, 162, 0.634);
     font-family: 'Cinzel', serif;
     user-select: none;
   }
@@ -50,6 +50,12 @@
   #gameOverMenu h1, #main-menu h1 {
     text-align: center; 
     margin: 15px;
+    margin-bottom: 0px;
+  }
+
+  #gameOverMenu p {
+    color: var(--cream-color);
+    font-size: 20px;
   }
 
   #menu-logo {
@@ -60,7 +66,7 @@
   }
 
   #main-menu img:not(#menu-bg), #main-menu button,
-  #gameOverMenu img:not(#menu-bg), #gameOverMenu button, #gameOverMenu h1 {
+  #gameOverMenu img:not(#menu-bg), #gameOverMenu button, #gameOverMenu h1, #gameOverMenu p {
     position: relative;
     z-index: 1;
   }
@@ -116,7 +122,7 @@
     filter: brightness(1.2);
     color:rgb(214, 214, 214);
     transform: translateY(-3px);
-    box-shadow: 0 3px 5px 2px #2a1f0072;
+    box-shadow: 0 3px 4px 3px #180e009b;
     cursor: pointer;
   }  
   
@@ -228,3 +234,27 @@
     border-radius: 50%;
     background-color: white;
   }  
+
+  #powerBorder {
+    position: absolute;
+    top: 40%;
+    left: 25px;
+
+    background-color: rgb(83, 83, 83);
+    width: 90px;
+    height: 22px;
+    display: block;
+    border: 5px groove rgb(104, 104, 104);
+    border-style: groove;
+  }
+
+  #powerBar {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    background-color: rgb(117, 198, 83);
+    width: 90px;
+    height: 22px;
+    display: block;
+  }
