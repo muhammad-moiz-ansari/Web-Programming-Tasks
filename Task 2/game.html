@@ -19,14 +19,13 @@
     <div class="displayBoard">
       <div id="timer">Time: 60 s</div>
       <div id="score">Score: 0</div>
-      <p id="incScore"></p>
     </div>
     <div class="arrowCount">
       <img id="bagImg" src="sprites/bag1.png" alt="" style="width: 100%; height: 100%; position: left;">
       <p id="arrowCount" style="width: 200px">10</p>
     </div>
   </div>
-
+  
   <div id="gameOverMenu">
     <img id="menu-bg" src="sprites/menu-bg.png" alt="">
     <h1>Game Over!</h1>
@@ -35,8 +34,9 @@
     <button onclick="window.location.href='index.html'">Main Menu</button>
     <button onclick="exitGame()">Exit</button>
   </div>
-
+  
   <div id="gameArea">
+    <p id="incScore"></p>
     <div id="powerBorder">
       <div id="powerBar"></div>
     </div>
@@ -263,7 +263,11 @@
     score += scoreIncrement;
     scoreDisplay.textContent = "Score: " + score;
     scoreInc.textContent = "+ " + scoreIncrement + "pts";
-    scoreInc.style.opacity = 1;
+    scoreInc.style.left = target.offsetLeft - scoreInc.offsetWidth - 30 + "px";
+    scoreInc.style.top = target.offsetTop + "px";
+    scoreInc.classList.remove("pop-animation");
+    void scoreInc.offsetWidth;
+    scoreInc.classList.add("pop-animation");
   }
 
   function updateArrowCount() {
@@ -307,7 +311,6 @@
       if (arrowPinned) {
         resetArrow();
         arrowPinned = false;
-        scoreInc.style.opacity = 0;
         return;
       }
   });
@@ -319,7 +322,7 @@
       if (isGameFinished && tempEndGame && arrowMoving == false) {
         console.log(isGameFinished, tempEndGame, arrowMoving);
         // wait 2 seconds
-        scoreInc.style.opacity = 0;
+        //scoreInc.style.opacity = 0;
         gameOver = true;
         tempEndGame = false;
         endGame();
@@ -461,7 +464,6 @@
       if (arrowPinned) {
         resetArrow();
         arrowPinned = false;
-        scoreInc.style.opacity = 0;
         return;
       }
     }
