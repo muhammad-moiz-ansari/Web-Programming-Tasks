@@ -75,14 +75,21 @@
     object-fit: fill;
   }
 
-  #bg-img, #bg-main {
+  #bg-img{
     object-fit: cover;
-    filter: brightness(0.5);
+    filter: brightness(0.6);
+    transition: filter 0.3s ease;
   }
 
   #bg-main {
     object-fit: cover;
     filter: brightness(0.4);
+  }
+
+  .dimmed {
+    filter: brightness(0.5);
+    pointer-events: none;
+    transition: filter 0.3s ease;
   }
 
   button {

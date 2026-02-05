@@ -27,6 +27,14 @@
     </div>
   </div>
 
+  <div id="gameOverMenu">
+    <img id="menu-bg" src="sprites/menu-bg.png" alt="">
+    <h1>Game Over!</h1>
+    <button onclick="restartGame()">Restart</button>
+    <button onclick="window.location.href='index.html'">Main Menu</button>
+    <button onclick="exitGame()">Exit</button>
+  </div>
+
   <div id="gameArea">
     <div id="target">
       <img src="sprites/target.png" alt="" style="width: 100%; height: 100%; position: inherit;">
@@ -36,14 +44,6 @@
     </div>
     <div id="bow">
       <img src="sprites/bow1.png" alt="}" style="width: 100%; height: 100%; position: inherit;">
-    </div>
-
-    <div id="gameOverMenu">
-      <img id="menu-bg" src="sprites/menu-bg.png" alt="">
-      <h1>Game Over!</h1>
-      <button onclick="restartGame()">Restart</button>
-      <button onclick="window.location.href='index.html'">Main Menu</button>
-      <button onclick="exitGame()">Exit</button>
     </div>
   </div>
 
@@ -60,6 +60,10 @@
   const bagImage = document.getElementById("bagImg");
   const bowImage = document.querySelector("#bow img");
 
+  const gameArea = document.getElementById("gameArea");
+  const navBar = document.querySelector(".navbar");
+  const bgImg = document.getElementById("bg-img");
+
   // Game Over Menu
   const endMenu = document.getElementById("gameOverMenu");
 
@@ -73,8 +77,8 @@
   // Defaults
   let defSpeed = 41;
   let defArrowSpeed = 20;
-  let defTime = 6;
-  let defArrowCount = 1;
+  let defTime = 60;
+  let defArrowCount = 15;
 
   // Screen Displays
   let timeLeft = defTime;
@@ -133,8 +137,10 @@
       endMenu.querySelector("h1").textContent = "Time Over!";
     else if (arrowCount <= 0)
       endMenu.querySelector("h1").textContent = "You ran out of arrows!";
-    //endMenu.style.left = (window.innerWidth / 2) - (endMenu.offsetWidth / 2) + "px";
-    //endMenu.style.top = (window.innerHeight / 2) - (endMenu.offsetHeight / 2) + "px";
+
+    gameArea.classList.add("dimmed");
+    navBar.classList.add("dimmed");
+    bgImg.style.filter = "brightness(0.4)";
   }
 
   function restartGame() {
@@ -160,6 +166,10 @@
     clearInterval(startTimerInterval);
     clearInterval(moveInterval);
     clearInterval(difficultyInterval);
+
+    gameArea.classList.remove("dimmed");
+    navBar.classList.remove("dimmed");
+    bgImg.style.filter = "brightness(0.6)";
     
     runGame();
   }
