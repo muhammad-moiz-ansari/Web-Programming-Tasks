@@ -294,52 +294,20 @@
   /* Shooting Arrow Click Handled */
   document.addEventListener("click", () => {
     if (gameOver || arrowCount <= 0) return;
-    if (gameEnded) {
-      gameEnded = false;
-      return;
-    }
-    if (arrowMoving) return;
 
-    // Reloads arrow if already pinned to target
-    if (arrowPinned) {
-      resetArrow();
-      arrowPinned = false;
-      scoreInc.style.opacity = 0;
-      return;
-    }
-    
-    arrowMoving = true;
-    updateArrowCount();
-    if (!shootAnimation && !reloadAnimation)
-      shoot();
-
-    arrowInterval = setInterval(() => {
-      let arrowTipX = arrow.offsetLeft + arrow.offsetWidth;
-      let arrowTipY = arrow.offsetTop + (arrow.offsetHeight / 2);
-      let targetTop = target.offsetTop;
-      let targetBottom = targetTop + target.offsetHeight;
-      let targetSurface = target.offsetLeft + (target.offsetWidth / 2) - 20;
-      arrow.style.left = arrow.offsetLeft + 15 + "px";
-
-      // Check Collision
-      if (arrowTipX >= targetSurface &&
-          arrowTipX <= targetSurface + 15 &&
-          arrowTipY >= targetTop &&
-          arrowTipY <= targetBottom
-      ) {
-        let areaHit = checkInnerCollision(arrow.offsetTop + (arrow.offsetHeight / 2));
-        updateScore(areaHit);
-        arrowMoving = false;
-        arrowPinned = true;
-        clearInterval(arrowInterval);
+      if (gameEnded) {
+        gameEnded = false;
+        return;
       }
+      if (arrowMoving) return;
 
-      // Arrow out of bounds
-      if (arrow.offsetLeft > window.innerWidth) {
+      // Reloads arrow if already pinned to target
+      if (arrowPinned) {
         resetArrow();
-        clearInterval(arrowInterval);
+        arrowPinned = false;
+        scoreInc.style.opacity = 0;
+        return;
       }
-    }, arrowSpeed);
   });
   
   function checkGameOver() {
@@ -398,17 +366,20 @@
     arrowMoving = false;
     arrow.style.top = bow.offsetTop - (arrow.offsetHeight / 2) + "px";
     arrow.style.left = bow.offsetLeft + 40 + "px";
-    if(!reloadAnimation && !shootAnimation) {
-      //reload();
-    }
+    arrowSpeed = defArrowSpeed;
+    resetPower();
+    reload();
   }
 
   /* ANIMATIONS */
   function reload() {
+    bowImage.src = "sprites/bow1.png";
+    //resetArrow(); 
+    
+    /*
     reloadAnimation = true;
     let i = 1;
     let arrowOffset;
-
     reloadInt = setInterval(() => {
       if (i >= stretchVal) {
         clearInterval(reloadInt);
@@ -431,6 +402,7 @@
       arrow.style.left = arrow.offsetLeft - arrowOffset + "px";
       i++;
     }, 25);
+    */
   }
 
   function shoot() {
@@ -472,13 +444,76 @@
   let x1, y1, x2, y2, dragDistance;
 
   document.addEventListener("mousedown", (e) => {
-    isDragging = true;
-    x1 = e.clientX;
-    y1 = e.clientY;
+    if (e.target.tagName === "BUTTON" || e.target.closest("#gameOverMenu")) return;
+    if(!arrowMoving) {
+      isDragging = true;
+      x1 = e.clientX;
+      y1 = e.clientY;
+
+      x2 = x1;
+      y2 = y1; 
+      dragDistance = 0;
+
+      // Reloads arrow if already pinned to target
+      if (arrowPinned) {
+        resetArrow();
+        arrowPinned = false;
+        scoreInc.style.opacity = 0;
+        return;
+      }
+    }
   });
 
   document.addEventListener("mouseup", () => {
-    isDragging = false;
+    if (isDragging) {
+      isDragging = false;
+
+      if (gameOver || arrowCount <= 0) return;
+
+      if (gameEnded) {
+        gameEnded = false;
+        return;
+      }
+      if (arrowMoving) return;
+
+      if (!dragDistance || dragDistance < 10) {
+        setPower(50); // Minimum power for a quick click
+      }
+      
+      arrowMoving = true;
+      powerBar.style.width = "0px";
+      updateArrowCount();
+      if (!shootAnimation && !reloadAnimation)
+        shoot();
+
+      arrowInterval = setInterval(() => {
+        let arrowTipX = arrow.offsetLeft + arrow.offsetWidth;
+        let arrowTipY = arrow.offsetTop + (arrow.offsetHeight / 2);
+        let targetTop = target.offsetTop;
+        let targetBottom = targetTop + target.offsetHeight;
+        let targetSurface = target.offsetLeft + (target.offsetWidth / 2) - 20;
+        arrow.style.left = arrow.offsetLeft + 15 + "px";
+
+        // Check Collision
+        if (arrowTipX >= targetSurface &&
+            arrowTipX <= targetSurface + 15 &&
+            arrowTipY >= targetTop &&
+            arrowTipY <= targetBottom
+        ) {
+          let areaHit = checkInnerCollision(arrow.offsetTop + (arrow.offsetHeight / 2));
+          updateScore(areaHit);
+          arrowMoving = false;
+          arrowPinned = true;
+          clearInterval(arrowInterval);
+        }
+
+        // Arrow out of bounds
+        if (arrow.offsetLeft > window.innerWidth) {
+          resetArrow();
+          clearInterval(arrowInterval);
+        }
+      }, arrowSpeed);
+    }
   });
 
   document.addEventListener("mousemove", (e) => {
@@ -495,7 +530,13 @@
   function initPowerBar() {
     powerBar.style.width = 0 + "px";
     powerBar.style.height = powerBorder.offsetHeight + "px";
-    powerBar.style.color = "green";
+  }
+
+  function resetPower() {
+    powerBar.style.width = "0px";
+    stretchVal = 1;              
+    arrowSpeed = defArrowSpeed;
+    dragDistance = 0;
   }
 
   function setPower(dist) {
@@ -504,25 +545,25 @@
     let arrowLeft = arrow.offsetLeft;
     let newALeft;
     if(dist >= 250) {
-      arrowSpeed = defArrowSpeed + 6;
+      arrowSpeed = defArrowSpeed - 8;
       stretchVal = 6;
       pwidth = pdefW;
       newALeft = al6;
     }
     else if (dist >= 200) {
-      arrowSpeed = defArrowSpeed + 4;
+      arrowSpeed = defArrowSpeed - 6;
       stretchVal = 5;
       pwidth = pdefW * 0.7;
       newALeft = al5;
     }
     else if (dist >= 150) {
-      arrowSpeed = defArrowSpeed + 2;
+      arrowSpeed = defArrowSpeed - 4;
       stretchVal = 4;
       pwidth = pdefW * 0.5;
       newALeft = al4;
     }
     else if (dist >= 100) {
-      arrowSpeed = defArrowSpeed;
+      arrowSpeed = defArrowSpeed - 2;
       stretchVal = 3;
       pwidth = pdefW * 0.3;
       newALeft = al3;
