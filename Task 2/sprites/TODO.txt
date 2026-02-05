@@ -1,1 +1,0 @@
-make sprites or bow animation
