@@ -137,6 +137,7 @@
     moveTarget();
     increaseDifficulty();
     checkGameOver();
+    initPowerBar();
   }
 
   function endGame() {
@@ -477,7 +478,7 @@
       if (arrowMoving) return;
 
       if (!dragDistance || dragDistance < 10) {
-        setPower(50); // Minimum power for a quick click
+        setPower(40); // Minimum power for a quick click
       }
       
       arrowMoving = true;
@@ -528,8 +529,11 @@
   });
 
   function initPowerBar() {
+    powerBorder.style.top = bow.offsetTop - (bow.offsetHeight / 2) - powerBorder.offsetHeight - 7 + "px";
+    powerBorder.style.left = bow.offsetLeft;
+
     powerBar.style.width = 0 + "px";
-    powerBar.style.height = powerBorder.offsetHeight + "px";
+    powerBar.style.height = powerBorder.offsetHeight - 10 + "px";
   }
 
   function resetPower() {
@@ -569,9 +573,15 @@
       newALeft = al3;
     }
     else if (dist >= 50) {
-      arrowSpeed = defArrowSpeed + 1;
+      arrowSpeed = defArrowSpeed;
       stretchVal = 2;
-      pwidth = pdefW * 0.13;
+      pwidth = pdefW * 0.17;
+      newALeft = al2;
+    }
+    else {
+      arrowSpeed = defArrowSpeed + 2;
+      stretchVal = 2;
+      pwidth = pdefW * 0.1;
       newALeft = al2;
     }
     powerBar.style.width = pwidth + "px";
