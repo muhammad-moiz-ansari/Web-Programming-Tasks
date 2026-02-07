@@ -485,6 +485,8 @@
         angle = 0;
         angleRad = 0;
         setPower(40); // Minimum power for a quick click
+        arrow.style.transform = "rotate(" + angle + "deg)";
+        bow.style.transform = "translateY(-50%) rotate(" + angle + "deg)";
       }
       
       arrowMoving = true;
@@ -528,7 +530,11 @@
         }
 
         // Arrow out of bounds
-        if (arrow.offsetLeft > window.innerWidth) {
+        if (arrow.offsetLeft > window.innerWidth || 
+            arrow.offsetLeft + arrow.offsetWidth < 0 ||
+            arrow.offsetTop < 0 ||
+            arrow.offsetTop > window.innerHeight
+          ) {
           resetArrow();
           clearInterval(arrowInterval);
         }
@@ -620,8 +626,19 @@
     angle = angleRad * (180 / Math.PI);
     console.log("Angle: " + angle);
 
-    arrow.style.transform = "rotate(" + angle + "deg)";
-    bow.style.transform = "translateY(-50%) rotate(" + angle + "deg)";
+    /*
+    if (angle >= -179.99 && angle < -35) {
+      angle = -35;
+    }
+    else  (angle <= 179.99 && angle > 35) {
+      angle = 35;
+    }
+    */
+      
+    //if (Math.abs(angle) <= 35) {
+      arrow.style.transform = "rotate(" + angle + "deg)";
+      bow.style.transform = "translateY(-50%) rotate(" + angle + "deg)";
+    //}
   }
 
   runGame();
