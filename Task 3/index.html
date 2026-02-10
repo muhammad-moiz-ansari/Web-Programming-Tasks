@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ToDo List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.png" type="image/x-icon">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<style>
+:root {
+    --dark-color: #1a0f00;
+    --primary-color: #ff9505;
+    --secondary-color: #ffb143;
+    --text-color: #ffffff;
+    --cream-color: #fff9f0;
+    --dark-cream: #f5e6d3;
+    --light-cream: #fffdf9;
+    --medium-bg: #2a1f00;
+    --hover-color: #e67e00;
+}
+h2 {
+    text-align: center;
+}
+
+/* sign in section */
+#todo-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: var(--light-cream);
+}
+
+#form-container {
+    width: 500px;
+    padding: 20px;
+    margin: 20px;
+    background-color: var(--cream-color);
+    border-radius: 8px;
+    max-width: 612px;
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 4px 12px rgba(255, 151, 5, 0.399);
+}
+
+/* Forms */
+.todo-item p{
+    margin: 0px 0px 10px 0px;
+    padding: 0px;
+    font-size: 18px;
+    width: fixed;
+    color: var(--dark-color);
+}
+
+.todo-form input, .todo-form textarea, .todo-form button {
+    background-color: var(--light-cream);
+    color: var(--dark-color);
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    transition: border 0.5s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.todo-form input:focus, .todo-form textarea:focus, .todo-form input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 5px var(--primary-color);
+}
+
+.todo-form textarea {
+    resize: vertical;
+    min-height: 62px;
+}
+
+::placeholder {
+    color: #8b7355d7;
+    font-style: italic;
+}
+
+.todo-form button {
+    background-color: var(--primary-color);
+    color: var(--cream-color);
+    border-style: none;
+    transition: all 0.3s ease;
+}
+
+/* To do rows */
+.todo-row {
+    display: flex;
+    align-items: center; /* Vertically centers the checkbox with text */
+    padding: 10px;
+    border-bottom: 1px solid var(--secondary-color); /* Adds a line between items */
+    transition: background-color 0.2s;
+}
+
+.todo-row:last-child {
+    border-bottom: none; /* Remove border for the last item */
+}
+
+.todo-row:hover {
+    background-color: var(--dark-cream);
+}
+
+.todo-row input[type="checkbox"] {
+    /* Resetting your global input width so the checkbox stays small */
+    width: auto; 
+    margin-right: 15px;
+    cursor: pointer;
+    accent-color: var(--primary-color); /* Makes the checkbox orange when clicked */
+}
+
+.todo-row span {
+    color: var(--dark-color);
+    font-size: 16px;
+    font-family: sans-serif; /* Or your preferred font */
+}
+</style>
+
+<body>
+	<section id="todo-section">
+            <section id="form-container">
+                <h2>ToDo List</h2>
+                <div class="todo-form">
+                    <form>
+                        <div class="todo-item">
+                            
+                        </div>
+                    </form>
+                </div>
+            </section>
+        </section>
+
+<script>
+    const todoItem = document.querySelector('.todo-item');
+	fetch('https://jsonplaceholder.typicode.com/todos')
+    .then(response => response.json())
+    .then(todos => {
+        const todoList = todos.slice(0, 10);
+
+        todoList.forEach(todo => {
+            const row = document.createElement('div');
+            row.classList.add('todo-row');
+
+            const checkbox=document.createElement('input')
+            checkbox.type='checkbox';
+            checkbox.checked=todo.completed;
+
+            const line=document.createElement('span')
+            line.innerText=todo.title;
+
+            // Put both elements into the div
+            row.appendChild(checkbox);
+            row.appendChild(line);
+
+            // Put the row in main container now
+            todoItem.appendChild(row);
+        });
+    })
+    // will return all resources
+</script>
+</body>
+</html>
