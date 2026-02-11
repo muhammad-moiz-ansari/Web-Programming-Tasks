@@ -1,0 +1,111 @@
+:root {
+    --gray: #8c8c8c;
+    --gray-dark: #5f5f5f;
+    --gray-light: #a2a2a2;
+    --gray-extra-light: #bdbdbd;
+    --primary-color: #3d5fbe;
+    --bg-color: white;
+}
+
+/**********************/
+/*                    */
+/*    BODY + TEXTS    */
+/*                    */
+/**********************/
+body {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+h3 {
+    font-size: 17px;
+}
+
+span {
+    font-size: 14px;
+}
+
+
+/*****************/
+/*               */
+/*    BUTTONS    */
+/*               */
+/*****************/
+
+/* OUTSIDE BUTTONS */
+.btn {
+    padding: 10px 19px;
+    border: var(--gray) solid 2px;
+    border-radius: 3px;
+    background-color: var(--bg-color);
+    color: var(--gray-dark);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.reset-btn {
+    text-transform: uppercase;
+}
+.reset-btn:hover {
+    color: var(--bg-color);
+    background-color: var(--gray);
+    transform: scale(1.03px);
+}
+
+.choose-btn {
+    text-transform: uppercase;
+    background-color: var(--gray);
+    color: var(--bg-color);
+}
+.choose-btn:hover {
+    color: var(--gray-dark);
+    background-color: var(--bg-color);
+    transform: scale(1.03px);
+}
+
+.save-btn {
+    text-transform: uppercase;
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    border-color: var(--primary-color);
+}
+.save-btn:hover {
+    color: var(--primary-color);
+    background-color: var(--bg-color);
+    transform: scale(1.03px);
+}
+
+/* FILTER OPTIONS BUTTONS */
+.options-btn-active {
+    background-color: var(--primary-color);
+    color: var(--bg-color);
+    border-color: var(--primary-color);
+    cursor: default;
+}
+
+.options-btn-inactive {
+    background-color: var(--bg-color);
+    color: var(--gray-light);
+    border-color: var(--gray-extra-light);
+}
+.options-btn-inactive:hover {
+    color: var(--bg-color);
+    background-color: var(--gray);
+    border-color: var(--gray);
+    transform: scale(1.03px);
+}
+
+/* ROTATE & FLIP BUTTONS */
+.rotate-flip button {
+    padding: 5px 10px;
+    border: var(--gray) solid 2px;
+    border-radius: 3px;
+    background-color: var(--bg-color);
+    color: var(--gray-dark);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+.rotate-flip button:hover {
+    color: var(--bg-color);
+    background-color: var(--gray);
+    transform: scale(1.03px);
+}

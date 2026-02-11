@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Image Holder -->
+        <div class="image-div">
+            <canvas id="canvas-image"></canvas>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-container">
+            <!-- Filters Heading & Options -->
+            <h3>Filters</h3>
+            <div class="filter-options">
+                <button class="btn options-btn-active">Brightness</button>
+                <button class="btn options-btn-inactive">Saturation</button>
+                <button class="btn options-btn-inactive">Inversion</button>
+                <button class="btn options-btn-inactive">Grayscale</button>
+                <button class="btn options-btn-inactive">Rotate</button>
+                <button class="btn options-btn-inactive">Sepia</button>
+                <button class="btn options-btn-inactive">Blur</button>
+            </div>
+
+            <!-- Filter Slider -->
+            <div class="slider-info">
+                <span id="slider-heading">Brightness</span>
+                <span id="slider-percent">50%</span>
+            </div>
+            <input id="slider" type="range">
+
+            <!-- Rotate & Flip -->
+            <h3>Rotate & Flip</h3>
+            <div class="rotate-flip">
+                <button id="rotate-left" title="Rotate Left">&#8634;</button>
+                <button id="rotate-right" title="Rotate Right">&#8635; </button>
+                <button id="flip-x" title="Flip Horizontal">&#8644; </button>                    
+                <button id="flip-y" title="Flip Vertical">&#8645; </button>
+            </div>
+        </div>
+
+        <!-- Left Buttons Outside -->
+        <div class="left-buttons">
+            <button class="reset-btn btn">Reset Filters</button>
+        </div>
+
+        <!-- Right Buttons Outside -->
+        <div class="right-buttons">
+            <button class="choose-btn btn">Choose Image</button>
+            <button class="save-btn btn">Save Image</button>
+        </div>
+    </div>
+
+
+<script>
+
+</script>
+</body>
+</html>
