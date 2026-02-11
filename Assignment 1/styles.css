@@ -97,7 +97,7 @@ span {
 
 /* ROTATE & FLIP BUTTONS */
 .rotate-flip button {
-    padding: 5px 10px;
+    padding: 6px 10px;
     border: var(--gray) solid 2px;
     border-radius: 3px;
     background-color: var(--bg-color);
@@ -120,9 +120,10 @@ span {
 .container {
     display: grid;
     gap: 15px;
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 260px 1fr;
     grid-template-areas: "filters canvas"
                          "left-btns right-btns";
+    /*overflow-x: auto;*/
 }
 
 .filters-container {
@@ -137,6 +138,7 @@ span {
     border: var(--gray) groove 5px;
     border-radius: 2px;
     padding: 15px;
+    min-width: 270px;
 }
 
 .left-buttons {
@@ -159,4 +161,46 @@ span {
     gap: 5px;
     margin-bottom: 15px;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.rotate-flip {
+    display: grid;
+    gap: 5px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+/*****************/
+/*               */
+/*    SPINNER    */
+/*               */
+/*****************/
+
+.slider-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+#slider {
+    width: 100%;
+}
+
+/************************/
+/*                      */
+/*    RESPONSIVENESS    */
+/*                      */
+/************************/
+
+@media (max-width: 500px) {
+    .container {
+        grid-template-columns: 1fr;
+        grid-template-areas: "canvas"
+                             "filters"
+                             "left-btns"
+                             "right-btns";
+    }
+    .left-buttons button, .right-buttons button {
+        justify-content: center;
+        width: 100%;
+        padding: 10px 10px;
+    }
 }
