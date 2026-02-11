@@ -19,6 +19,7 @@ body {
 
 h3 {
     font-size: 17px;
+    margin-bottom: 10px;
 }
 
 span {
@@ -151,4 +152,11 @@ span {
     justify-content: flex-end;
     align-items: center;
     gap: 10px;
+}
+
+.filter-options {
+    display: grid;
+    gap: 5px;
+    margin-bottom: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
