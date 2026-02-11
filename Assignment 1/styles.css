@@ -137,8 +137,21 @@ span {
     grid-area: canvas;
     border: var(--gray) groove 5px;
     border-radius: 2px;
-    padding: 15px;
     min-width: 270px;
+    padding: 0px;
+    margin: 0px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+#canvas-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    align-items: center;
+    justify-content: center;
 }
 
 .left-buttons {
@@ -190,7 +203,20 @@ span {
 /*                      */
 /************************/
 
-@media (max-width: 500px) {
+@media (max-width: 680px) {
+    .container {
+        grid-template-columns: 230px 1fr;
+    }
+    .filter-options {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+    h3 {
+        margin-top: 2px;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 630px) {
     .container {
         grid-template-columns: 1fr;
         grid-template-areas: "canvas"
@@ -202,5 +228,10 @@ span {
         justify-content: center;
         width: 100%;
         padding: 10px 10px;
+    }
+    .filter-options {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        max-height: 85px;
+        overflow-y: auto;
     }
 }

@@ -11,9 +11,7 @@
     <div class="container">
         <!-- Image Holder -->
         <div class="image-container">
-            <canvas id="canvas-image">
-                <img id="image" src="default.png" alt="Image will be displayed here">
-            </canvas>
+            <canvas id="canvas-image"></canvas>
         </div>
 
         <!-- Filters Section -->
@@ -49,19 +47,35 @@
 
         <!-- Left Buttons Outside -->
         <div class="left-buttons">
-            <button class="reset-btn btn">Reset Filters</button>
+            <button class="reset-btn btn" id="reset-btn">Reset Filters</button>
         </div>
 
         <!-- Right Buttons Outside -->
         <div class="right-buttons">
-            <button class="choose-btn btn">Choose Image</button>
-            <button class="save-btn btn">Save Image</button>
+            <button class="choose-btn btn" id="choose-btn">Choose Image</button>
+            <button class="save-btn btn" id="save-btn">Save Image</button>
         </div>
     </div>
 
-
+<!--
+    <script src="script.js"></script>
+-->
 <script>
+window.onload = function() {
+    const canvas = document.getElementById("canvas-image");
+    const context = canvas.getContext("2d");
+    const img = new Image();
 
+    img.src="default.png";
+    img.cover = true;
+    img.width = canvas.clientWidth;
+    img.height = canvas.clientHeight;
+    img.onload = function() {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        context.drawImage(img, 0, 0, canvas.clientWidth, canvas.clientHeight);
+    }
+}
 </script>
 </body>
 </html>
