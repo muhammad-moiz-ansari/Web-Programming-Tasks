@@ -14,6 +14,7 @@
 /**********************/
 body {
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    margin: 15px;
 }
 
 h3 {
@@ -23,7 +24,6 @@ h3 {
 span {
     font-size: 14px;
 }
-
 
 /*****************/
 /*               */
@@ -108,4 +108,47 @@ span {
     color: var(--bg-color);
     background-color: var(--gray);
     transform: scale(1.03px);
+}
+
+/********************/
+/*                  */
+/*    CONTAINERS    */
+/*                  */
+/********************/
+
+.container {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: 280px 1fr;
+    grid-template-areas: "filters canvas"
+                         "left-btns right-btns";
+}
+
+.filters-container {
+    grid-area: filters;
+    border: var(--gray-light) solid 2px;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.image-container {
+    grid-area: canvas;
+    border: var(--gray) groove 5px;
+    border-radius: 2px;
+    padding: 15px;
+}
+
+.left-buttons {
+    grid-area: left-btns;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.right-buttons {
+    grid-area: right-btns;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
 }
