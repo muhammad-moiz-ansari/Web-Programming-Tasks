@@ -33,28 +33,28 @@
                 <span id="slider-heading">Brightness</span>
                 <span id="slider-percent">100%</span>
             </div>
-            <input id="slider" type="range">
+            <input id="slider" type="range" step="3">
 
             <!-- Rotate & Flip -->
             <h3>Rotate & Flip</h3>
             <div class="rotate-flip">
-                <button id="rotate-left" title="Rotate Left">&#8634;</button>
-                <button id="rotate-right" title="Rotate Right">&#8635; </button>
-                <button id="flip-x" title="Flip Horizontal">&#8644; </button>                    
-                <button id="flip-y" title="Flip Vertical">&#8645; </button>
+                <button id="rotate-left" title="Rotate Left" onclick="rotate_left()">&#8634;</button>
+                <button id="rotate-right" title="Rotate Right" onclick="rotate_right()">&#8635; </button>
+                <button id="flip-x" title="Flip Horizontal" onclick="flip_horizontal()">&#8644; </button>                    
+                <button id="flip-y" title="Flip Vertical" onclick="flip_vertical()">&#8645; </button>
             </div>
         </div>
 
         <!-- Left Buttons Outside -->
         <div class="left-buttons">
-            <button class="reset-btn btn" id="reset-btn">Reset Filters</button>
+            <button class="reset-btn btn" id="reset-btn" onclick="resetFilters()">Reset Filters</button>
         </div>
 
         <!-- Right Buttons Outside -->
         <div class="right-buttons">
             <input type="file" id="file-input" accept="image/*" hidden>
             <button class="choose-btn btn" id="choose-btn">📂 Choose Image</button>
-            <button class="save-btn btn" id="save-btn">💾 Save Image</button>
+            <button class="save-btn btn" id="save-btn" onclick="saveImage()">💾 Save Image</button>
         </div>
     </div>
 
@@ -72,6 +72,8 @@ const slider = document.getElementById("slider");
 const sliderHeading = document.getElementById("slider-heading");
 const sliderValue = document.getElementById("slider-percent");
 const filterButtons = document.querySelectorAll(".filter-options button");
+
+let filename = "edited-image.jpg";
 
 // Filter State Variables (Default Values)
 const currState= {
@@ -115,6 +117,7 @@ window.onload = function() {
     fileInput.addEventListener("change", function() {
         const file = this.files[0];
         if (file) {
+            filename = file.name;
             const reader = new FileReader();
             reader.onload = function(event) {
                 originalImage.src = event.target.result; 
@@ -215,6 +218,7 @@ filterButtons.forEach(btn => {
 
         activeFilter = clickedName;
         sliderHeading.textContent = clickedName;
+        slider.min = "0";
         switch (activeFilter) {
             case "Brightness":
                 value = currState.brightness;
@@ -256,6 +260,83 @@ filterButtons.forEach(btn => {
         slider.value = value;
     })
 })
+
+// Rotate & Flip Button Functions
+function rotate_left() {
+    currState.angle = (currState.angle - 90) % 360;
+    if (activeFilter === "Rotate") {
+        slider.value = currState.angle;
+        sliderValue.textContent = `${currState.angle}°`;
+    }
+    applyFilters();
+}
+function rotate_right() {
+    currState.angle = (currState.angle + 90) % 360;
+    if (activeFilter === "Rotate") {
+        slider.value = currState.angle;
+        sliderValue.textContent = `${currState.angle}°`;
+    }
+    applyFilters();
+}
+function flip_horizontal() {
+    currState.flipX *= -1;
+    applyFilters();
+}
+function flip_vertical() {
+    currState.flipY *= -1;
+    applyFilters();
+}
+
+function resetFilters() {
+    currState.brightness = 100;
+    currState.saturation = 100;
+    currState.inversion = 0;
+    currState.grayscale = 0;
+    currState.sepia = 0;
+    currState.blur = 0;
+    currState.angle = 0;
+    currState.flipX = 1;
+    currState.flipY = 1;
+
+    // Reset UI
+    const activeBtn = document.querySelector(".options-btn-active");
+    activeBtn.classList.remove("options-btn-active");
+    activeBtn.classList.add("options-btn-inactive");
+
+    const defaultBtn = document.querySelector(".filter-options button:first-child");
+    defaultBtn.classList.remove("options-btn-inactive");
+    defaultBtn.classList.add("options-btn-active");
+
+    activeFilter = "Brightness";
+    sliderHeading.textContent = "Brightness";
+    sliderValue.textContent = "100%";
+    slider.value = 100;
+    slider.max = "200";
+
+    applyFilters();
+}
+
+function saveImage() {
+    const link = document.createElement("a");
+
+    // Separate filename and extension
+    const lastDotIndex = filename.lastIndexOf(".");
+    let originalName = filename;
+    let ext = "jpg";
+    if (lastDotIndex !== -1) {
+        originalName = filename.substring(0, lastDotIndex);
+        ext = filename.substring(lastDotIndex + 1).toLowerCase();
+    }
+
+    link.download = `${originalName}-edited.${ext}`;
+
+    if (ext == "jpg" || ext == "jpeg")
+        url = "image/jpeg";
+    else
+        url = "image/png";
+    link.href = canvas.toDataURL(url, 1);
+    link.click();
+}
 </script>
 </body>
 </html>
