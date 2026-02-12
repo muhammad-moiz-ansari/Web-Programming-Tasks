@@ -15,7 +15,7 @@
         </div>
 
         <!-- Filters Section -->
-        <div class="filters-container">
+        <div class="filters-container disabled-container">
             <!-- Filters Heading & Options -->
             <h3>Filters</h3>
             <div class="filter-options">
@@ -46,7 +46,7 @@
         </div>
 
         <!-- Left Buttons Outside -->
-        <div class="left-buttons">
+        <div class="left-buttons disabled-container">
             <button class="reset-btn btn" id="reset-btn" onclick="resetFilters()">Reset Filters</button>
         </div>
 
@@ -54,7 +54,7 @@
         <div class="right-buttons">
             <input type="file" id="file-input" accept="image/*" hidden>
             <button class="choose-btn btn" id="choose-btn">📂 Choose Image</button>
-            <button class="save-btn btn" id="save-btn" onclick="saveImage()">💾 Save Image</button>
+            <button class="save-btn btn disabled-container" id="save-btn" onclick="saveImage()">💾 Save Image</button>
         </div>
     </div>
 
@@ -123,6 +123,12 @@ window.onload = function() {
                 originalImage.src = event.target.result; 
             };
             reader.readAsDataURL(file);
+
+            // Enable Editing
+            const disabled = document.querySelectorAll(".disabled-container");
+            disabled.forEach(dis_elem => {
+                dis_elem.classList.remove("disabled-container")
+            })
         }
     });
 };
