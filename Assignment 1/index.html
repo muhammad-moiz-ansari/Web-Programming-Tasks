@@ -21,8 +21,8 @@
             <div class="filters-header">
                 <h3>Filters</h3>
                 <div class="undo-redo-btns">
-                    <button title="Undo" onclick="undo()">↶</button>
-                    <button title="Redo" onclick="redo()">↷</button>
+                    <button class="disabled-button" id="undo-btn" title="Undo" onclick="undo()">↶</button>
+                    <button class="disabled-button" id="redo-btn" title="Redo" onclick="redo()">↷</button>
                 </div>
             </div>
             <div class="filter-options">
@@ -79,6 +79,8 @@ const slider = document.getElementById("slider");
 const sliderHeading = document.getElementById("slider-heading");
 const sliderValue = document.getElementById("slider-percent");
 const filterButtons = document.querySelectorAll(".filter-options button");
+const undoBtn = document.getElementById("undo-btn");
+const redoBtn = document.getElementById("redo-btn");
 
 let filename = "edited-image.jpg";
 
@@ -373,6 +375,9 @@ function saveState() {
 
     stack.push(newState);
     stackInd = stack.length - 1;
+
+    updateUndoRedoBtn();
+
     console.log("Saved. Total states:", stack.length, "Current Index:", stackInd);
 }
 
@@ -418,6 +423,9 @@ function restoreState() {
         sliderValue.textContent = `${val}px`;
     else
         sliderValue.textContent = `${val}%`;
+
+    // Enable / Disable Buttons
+    updateUndoRedoBtn();
 }
 
 function undo() {
@@ -432,6 +440,19 @@ function redo() {
         ++stackInd;
         restoreState();
     }
+}
+
+function updateUndoRedoBtn() {
+    console.log("Stack Index:", stackInd, "Stack Length:", stack.length);
+    if (stackInd > 0)
+        undoBtn.classList.remove("disabled-button");
+    else
+        undoBtn.classList.add("disabled-button");
+
+    if (stackInd < stack.length - 1)
+        redoBtn.classList.remove("disabled-button");
+    else
+        redoBtn.classList.add("disabled-button");
 }
 
 slider.addEventListener("change", saveState);

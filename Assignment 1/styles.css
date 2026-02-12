@@ -127,6 +127,11 @@ span {
     background-color: var(--gray);
     transform: scale(1.03px);
 }
+.disabled-button {
+    pointer-events: none;
+    opacity: 0.6;
+    user-select: none;
+}
 
 /********************/
 /*                  */
