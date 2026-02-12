@@ -31,7 +31,7 @@
             <!-- Filter Slider -->
             <div class="slider-info">
                 <span id="slider-heading">Brightness</span>
-                <span id="slider-percent">50%</span>
+                <span id="slider-percent">100%</span>
             </div>
             <input id="slider" type="range">
 
@@ -53,8 +53,8 @@
         <!-- Right Buttons Outside -->
         <div class="right-buttons">
             <input type="file" id="file-input" accept="image/*" hidden>
-            <button class="choose-btn btn" id="choose-btn">Choose Image</button>
-            <button class="save-btn btn" id="save-btn">Save Image</button>
+            <button class="choose-btn btn" id="choose-btn">📂 Choose Image</button>
+            <button class="save-btn btn" id="save-btn">💾 Save Image</button>
         </div>
     </div>
 
@@ -69,18 +69,22 @@ const canvas = document.getElementById("canvas-image");
 const ctx = canvas.getContext("2d");
 
 const slider = document.getElementById("slider");
-const sliderLabel = document.getElementById("slider-heading");
+const sliderHeading = document.getElementById("slider-heading");
 const sliderValue = document.getElementById("slider-percent");
 const filterButtons = document.querySelectorAll(".filter-options button");
 
 // Filter State Variables (Default Values)
-let brightness = 100;
-let saturation = 100;
-let inversion = 0;
-let grayscale = 0;
-let angle = 0; // For rotation
-let flipX = 1; // 1 for normal, -1 for flipped
-let flipY = 1; // 1 for normal, -1 for flipped
+const currState= {
+    brightness: 100,
+    saturation: 100,
+    inversion: 0,
+    grayscale: 0,
+    sepia: 0,
+    blur: 0,
+    angle: 0, // For rotation
+    flipX: 1, // 1 for normal, -1 for flipped
+    flipY: 1 // 1 for normal, -1 for flipped
+};
 
 // Track which filter is currently selected
 let activeFilter = "Brightness"; 
@@ -90,14 +94,19 @@ let originalImage = new Image();
 
 // --- 2. INITIALIZATION ---
 window.onload = function() {
-    // Load Default Image
-    originalImage.src = "default.png"; 
-    
     originalImage.onload = function() {
         canvas.width = originalImage.width;
         canvas.height = originalImage.height;
         ctx.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height);
     };
+    
+    // Load Default Image
+    originalImage.src = "default.png";
+
+    slider.value = currState.brightness;
+    sliderValue.textContent = slider.value + "%";
+    sliderHeading.textContent = activeFilter;
+    slider.max = "200";
 
     // Button Click -> Opens File Dialog
     chooseBtn.addEventListener("click", () => fileInput.click());
@@ -117,8 +126,136 @@ window.onload = function() {
 
 // --- 3. FILTER APPLICATION FUNCTION ---
 function applyFilters() {
-    
+    // Clear Canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Save Context State
+    ctx.save();
+
+    // Move to Center for Rotation & Flipping
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+
+    // Apply Rotation
+    ctx.rotate((currState.angle * Math.PI) / 180);
+
+    // Apply Flipping
+    ctx.scale(currState.flipX, currState.flipY);
+
+    // Move Back
+    ctx.translate(-canvas.width / 2, -canvas.height / 2);
+
+    // Set Filter Styles
+    ctx.filter = `brightness(${currState.brightness}%)
+        saturate(${currState.saturation}%)
+        invert(${currState.inversion}%)
+        grayscale(${currState.grayscale}%)
+        sepia(${currState.sepia}%)
+        blur(${currState.blur}px)`;
+
+    // Draw Image with Filters
+    ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+
+    // Restore Context State
+    ctx.restore();
 }
+
+// --- 4. Update Filters ---
+slider.addEventListener("input", function() {
+    const value = this.value;
+    sliderValue.textContent = `${value}%`;
+
+    switch (activeFilter) {
+        case "Brightness":
+            currState.brightness = value;
+            sliderHeading.textContent = "Brightness";
+            break;
+        case "Saturation":
+            currState.saturation = value;
+            sliderHeading.textContent = "Saturation";
+            break;
+        case "Inversion":
+            currState.inversion = value;
+            sliderHeading.textContent = "Inversion";
+            break;
+        case "Grayscale":
+            currState.grayscale = value;
+            sliderHeading.textContent = "Grayscale";
+            break;
+        case "Rotate":
+            currState.angle = value;
+            sliderHeading.textContent = "Rotate";
+            sliderValue.textContent = `${value}°`;
+            break;
+        case "Sepia":
+            currState.sepia = value;
+            sliderHeading.textContent = "Sepia";
+            break;
+        case "Blur":
+            currState.blur = value;
+            sliderHeading.textContent = "Blur";
+            sliderValue.textContent = `${value}px`;
+            break;
+    }
+    applyFilters();
+});
+
+// --- 5. Filter Option Change ---
+const inactiveBtns = document.querySelectorAll(".options-btn-inactive");
+
+filterButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        let value;
+        const activeBtn = document.querySelector(".options-btn-active");
+        activeBtn.classList.remove("options-btn-active");
+        activeBtn.classList.add("options-btn-inactive");
+        const clickedName = btn.innerHTML;
+
+        btn.classList.remove("options-btn-inactive");
+        btn.classList.add("options-btn-active");
+
+        activeFilter = clickedName;
+        sliderHeading.textContent = clickedName;
+        switch (activeFilter) {
+            case "Brightness":
+                value = currState.brightness;
+                slider.max = "200";
+                break;
+            case "Saturation":
+                value = currState.saturation;
+                slider.max = "200";
+                break;
+            case "Inversion":
+                value = currState.inversion;
+                slider.max = "100";
+                break;
+            case "Grayscale":
+                value = currState.grayscale;
+                slider.max = "100";
+                break;
+            case "Rotate":
+                value = currState.angle;
+                sliderValue.textContent = `${value}°`;
+                slider.min = "-360";
+                slider.max = "360";
+                break;
+            case "Sepia":
+                value = currState.sepia;
+                slider.max = "100";
+                break;
+            case "Blur":
+                value = currState.blur;
+                sliderValue.textContent = `${value}px`;
+                slider.max = "100";
+                break;
+            default:
+                slider.min = "0";
+                slider.max = "100";
+        }
+        if (activeFilter != "Blur" && activeFilter != "Rotate")
+            sliderValue.textContent = `${value}%`;
+        slider.value = value;
+    })
+})
 </script>
 </body>
 </html>
