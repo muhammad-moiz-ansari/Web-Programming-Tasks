@@ -112,6 +112,22 @@ span {
     transform: scale(1.03px);
 }
 
+/* UNDO & REDO BUTTONS */
+.undo-redo-btns button {
+    padding: 4px 7px;
+    border: var(--gray) solid 2px;
+    border-radius: 3px;
+    background-color: var(--bg-color);
+    color: var(--gray-dark);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+.undo-redo-btns button:hover {
+    color: var(--bg-color);
+    background-color: var(--gray);
+    transform: scale(1.03px);
+}
+
 /********************/
 /*                  */
 /*    CONTAINERS    */
@@ -131,6 +147,19 @@ span {
     pointer-events: none;
     opacity: 0.6;
     user-select: none;
+}
+
+.filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0px;
+}
+
+.undo-redo-btns {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
 }
 
 .filters-container {

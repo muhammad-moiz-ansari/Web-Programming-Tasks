@@ -17,7 +17,14 @@
         <!-- Filters Section -->
         <div class="filters-container disabled-container">
             <!-- Filters Heading & Options -->
-            <h3>Filters</h3>
+            <h2>Photo Editor</h2>
+            <div class="filters-header">
+                <h3>Filters</h3>
+                <div class="undo-redo-btns">
+                    <button title="Undo" onclick="undo()">↶</button>
+                    <button title="Redo" onclick="redo()">↷</button>
+                </div>
+            </div>
             <div class="filter-options">
                 <button class="btn options-btn-active">Brightness</button>
                 <button class="btn options-btn-inactive">Saturation</button>
@@ -76,7 +83,7 @@ const filterButtons = document.querySelectorAll(".filter-options button");
 let filename = "edited-image.jpg";
 
 // Filter State Variables (Default Values)
-const currState= {
+let currState = {
     brightness: 100,
     saturation: 100,
     inversion: 0,
@@ -87,6 +94,10 @@ const currState= {
     flipX: 1, // 1 for normal, -1 for flipped
     flipY: 1 // 1 for normal, -1 for flipped
 };
+
+// For Undo/Redo
+let stack = [];
+let stackInd = -1;
 
 // Track which filter is currently selected
 let activeFilter = "Brightness"; 
@@ -100,6 +111,12 @@ window.onload = function() {
         canvas.width = originalImage.width;
         canvas.height = originalImage.height;
         ctx.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height);
+
+        // Reset values
+        resetFilters(); 
+        stack = [];     
+        stackInd = -1;
+        saveState();
     };
     
     // Load Default Image
@@ -275,6 +292,7 @@ function rotate_left() {
         sliderValue.textContent = `${currState.angle}°`;
     }
     applyFilters();
+    saveState();
 }
 function rotate_right() {
     currState.angle = (currState.angle + 90) % 360;
@@ -283,14 +301,17 @@ function rotate_right() {
         sliderValue.textContent = `${currState.angle}°`;
     }
     applyFilters();
+    saveState();
 }
 function flip_horizontal() {
     currState.flipX *= -1;
     applyFilters();
+    saveState();
 }
 function flip_vertical() {
     currState.flipY *= -1;
     applyFilters();
+    saveState();
 }
 
 function resetFilters() {
@@ -343,6 +364,77 @@ function saveImage() {
     link.href = canvas.toDataURL(url, 1);
     link.click();
 }
+
+// UNDO / REDO
+function saveState() {
+    let newState = {...currState};
+
+    stack.length = stackInd + 1;
+
+    stack.push(newState);
+    stackInd = stack.length - 1;
+    console.log("Saved. Total states:", stack.length, "Current Index:", stackInd);
+}
+
+function restoreState() {
+    // Assign a copy of object
+    currState = {...stack[stackInd]};
+    
+    // Aply filters
+    applyFilters();
+
+    // Update UI
+    let val;
+    switch (activeFilter) {
+        case "Brightness": 
+            val = currState.brightness; 
+            break;
+        case "Saturation": 
+            val = currState.saturation; 
+            break;
+        case "Inversion": 
+            val = currState.inversion; 
+            break;
+        case "Grayscale": 
+            val = currState.grayscale; 
+            break;
+        case "Rotate": 
+            val = currState.angle; 
+            break;
+        case "Sepia": 
+            val = currState.sepia; 
+            break;
+        case "Blur": 
+            val = currState.blur; 
+            break;
+    }
+    
+    // Update slider position and text
+    slider.value = val;
+    
+    if (activeFilter === "Rotate")
+        sliderValue.textContent = `${val}°`;
+    else if (activeFilter === "Blur")
+        sliderValue.textContent = `${val}px`;
+    else
+        sliderValue.textContent = `${val}%`;
+}
+
+function undo() {
+    if (stackInd > 0) {
+        --stackInd;
+        restoreState();
+    }
+}
+
+function redo() {
+    if(stackInd < stack.length - 1) {
+        ++stackInd;
+        restoreState();
+    }
+}
+
+slider.addEventListener("change", saveState);
 </script>
 </body>
 </html>
