@@ -19,6 +19,7 @@ body {
 
 h3 {
     font-size: 17px;
+    margin-top: 0px;
     margin-bottom: 10px;
 }
 
@@ -195,6 +196,7 @@ span {
 
 #slider {
     width: 100%;
+    margin-bottom: 15px;
 }
 
 /************************/

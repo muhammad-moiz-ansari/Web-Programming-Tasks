@@ -52,6 +52,7 @@
 
         <!-- Right Buttons Outside -->
         <div class="right-buttons">
+            <input type="file" id="file-input" accept="image/*" hidden>
             <button class="choose-btn btn" id="choose-btn">Choose Image</button>
             <button class="save-btn btn" id="save-btn">Save Image</button>
         </div>
@@ -61,20 +62,62 @@
     <script src="script.js"></script>
 -->
 <script>
-window.onload = function() {
-    const canvas = document.getElementById("canvas-image");
-    const context = canvas.getContext("2d");
-    const img = new Image();
+// --- 1. GLOBAL VARIABLES ---
+const fileInput = document.getElementById("file-input");
+const chooseBtn = document.querySelector(".choose-btn");
+const canvas = document.getElementById("canvas-image");
+const ctx = canvas.getContext("2d");
 
-    img.src="default.png";
-    img.cover = true;
-    img.width = canvas.clientWidth;
-    img.height = canvas.clientHeight;
-    img.onload = function() {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        context.drawImage(img, 0, 0, canvas.clientWidth, canvas.clientHeight);
-    }
+const slider = document.getElementById("slider");
+const sliderLabel = document.getElementById("slider-heading");
+const sliderValue = document.getElementById("slider-percent");
+const filterButtons = document.querySelectorAll(".filter-options button");
+
+// Filter State Variables (Default Values)
+let brightness = 100;
+let saturation = 100;
+let inversion = 0;
+let grayscale = 0;
+let angle = 0; // For rotation
+let flipX = 1; // 1 for normal, -1 for flipped
+let flipY = 1; // 1 for normal, -1 for flipped
+
+// Track which filter is currently selected
+let activeFilter = "Brightness"; 
+
+// The Image Object
+let originalImage = new Image(); 
+
+// --- 2. INITIALIZATION ---
+window.onload = function() {
+    // Load Default Image
+    originalImage.src = "default.png"; 
+    
+    originalImage.onload = function() {
+        canvas.width = originalImage.width;
+        canvas.height = originalImage.height;
+        ctx.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height);
+    };
+
+    // Button Click -> Opens File Dialog
+    chooseBtn.addEventListener("click", () => fileInput.click());
+
+    // Loads New Image
+    fileInput.addEventListener("change", function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                originalImage.src = event.target.result; 
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+};
+
+// --- 3. FILTER APPLICATION FUNCTION ---
+function applyFilters() {
+    
 }
 </script>
 </body>
