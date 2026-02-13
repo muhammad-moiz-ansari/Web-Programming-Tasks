@@ -16,14 +16,22 @@
 
         <!-- Filters Section -->
         <div class="filters-container disabled-container">
-            <!-- Filters Heading & Options -->
             <h2>Photo Editor</h2>
+            <!-- Filters Heading & Options -->
             <div class="filters-header">
-                <h3>Filters</h3>
-                <div class="undo-redo-btns">
+                <h3 id="filters-heading">Filters</h3>
+                <div class="header-btns">
+                    <button id="history-btn">
+                        <img src="images/history.png" alt="Undo" width="17px">
+                    </button>
                     <button class="disabled-button" id="undo-btn" title="Undo" onclick="undo()">↶</button>
                     <button class="disabled-button" id="redo-btn" title="Redo" onclick="redo()">↷</button>
                 </div>
+            </div>
+            <div class="history-container">
+                <ul>
+                    <!-- History List Items added dynamically -->
+                </ul>
             </div>
             <div class="filter-options">
                 <button class="btn options-btn-active">Brightness</button>
@@ -43,7 +51,7 @@
             <input id="slider" type="range" step="3">
 
             <!-- Rotate & Flip -->
-            <h3>Rotate & Flip</h3>
+            <h3 id="rotate-flip-heading">Rotate & Flip</h3>
             <div class="rotate-flip">
                 <button id="rotate-left" title="Rotate Left" onclick="rotate_left()">&#8634;</button>
                 <button id="rotate-right" title="Rotate Right" onclick="rotate_right()">&#8635; </button>
@@ -75,12 +83,22 @@ const chooseBtn = document.querySelector(".choose-btn");
 const canvas = document.getElementById("canvas-image");
 const ctx = canvas.getContext("2d");
 
-const slider = document.getElementById("slider");
-const sliderHeading = document.getElementById("slider-heading");
-const sliderValue = document.getElementById("slider-percent");
-const filterButtons = document.querySelectorAll(".filter-options button");
 const undoBtn = document.getElementById("undo-btn");
 const redoBtn = document.getElementById("redo-btn");
+const historyBtn = document.getElementById("history-btn");
+const historyList = document.querySelectorAll(".history-container li");
+const historyListContainer = document.querySelector(".history-container ul");
+let historyData = [];
+
+// Filters Container Elements
+const filtersHeading = document.getElementById("filters-heading");
+const filterOptions = document.querySelector(".filter-options");
+const filterButtons = document.querySelectorAll(".filter-options button");
+const sliderHeading = document.getElementById("slider-heading");
+const sliderValue = document.getElementById("slider-percent");
+const slider = document.getElementById("slider");
+const rotateFlipHeading = document.getElementById("rotate-flip-heading");
+const rotateFlipElements = document.querySelectorAll(".rotate-flip");
 
 let filename = "edited-image.jpg";
 
@@ -106,6 +124,7 @@ let activeFilter = "Brightness";
 
 // The Image Object
 let originalImage = new Image(); 
+let isDefaultImage = true;
 
 // --- 2. INITIALIZATION ---
 window.onload = function() {
@@ -115,10 +134,12 @@ window.onload = function() {
         ctx.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height);
 
         // Reset values
-        resetFilters(); 
         stack = [];     
         stackInd = -1;
-        saveState();
+        if (!isDefaultImage) {
+            resetFilters(); 
+        }
+        isDefaultImage = false;
     };
     
     // Load Default Image
@@ -294,7 +315,7 @@ function rotate_left() {
         sliderValue.textContent = `${currState.angle}°`;
     }
     applyFilters();
-    saveState();
+    saveState("Rotated Left: +90°");
 }
 function rotate_right() {
     currState.angle = (currState.angle + 90) % 360;
@@ -303,17 +324,17 @@ function rotate_right() {
         sliderValue.textContent = `${currState.angle}°`;
     }
     applyFilters();
-    saveState();
+    saveState("Rotated Right: -90°");
 }
 function flip_horizontal() {
     currState.flipX *= -1;
     applyFilters();
-    saveState();
+    saveState("Flipped Horizontally");
 }
 function flip_vertical() {
     currState.flipY *= -1;
     applyFilters();
-    saveState();
+    saveState("Flipped Vertically");
 }
 
 function resetFilters() {
@@ -343,8 +364,10 @@ function resetFilters() {
     slider.max = "200";
 
     applyFilters();
+    saveState("Reset Filters");
 }
 
+// download Image
 function saveImage() {
     const link = document.createElement("a");
 
@@ -367,16 +390,73 @@ function saveImage() {
     link.click();
 }
 
+function changeActiveHistory(listItem) {
+    const currSelected = document.querySelector(".history-container li.active");
+
+    if (currSelected)
+        currSelected.classList.remove("active");
+    
+    if (listItem)
+         listItem.classList.add("active");
+}
+
+function updateHistoryList(historyText) {
+    // Create list element
+    const historyItem = document.createElement("li");
+
+    // Set list text
+    let historyVal;
+    if (activeFilter === "Rotate")
+        historyVal = `${slider.value}°`;
+    else if (activeFilter === "Blur")
+        historyVal = `${slider.value}px`;
+    else
+        historyVal = `${slider.value}%`;
+
+    // List text
+    if (!historyText) {
+        historyText = `Edited ${activeFilter}: ${historyVal}`;
+    }
+
+    if (stackInd == 0)
+        historyItem.textContent = "Original Image";
+    else
+        historyItem.textContent = historyText;
+    
+    // Update active list item
+    changeActiveHistory(historyItem);
+
+    // Add its click event
+    historyItem.addEventListener("click", function() {
+        const itemsArray = Array.from(historyListContainer.children);
+        stackInd = itemsArray.indexOf(this);
+        
+        // Restore the image + Update active list item
+        restoreState();
+        changeActiveHistory(this);
+    });
+
+    // Append it to the HTML
+    historyListContainer.appendChild(historyItem);
+}
+
 // UNDO / REDO
-function saveState() {
+function saveState(historyText = "") {
     let newState = {...currState};
 
-    stack.length = stackInd + 1;
-
+    
+    if (stackInd < stack.length - 1) {
+        stack.length = stackInd + 1;
+        while (historyListContainer.children.length > stackInd + 1)
+            historyListContainer.removeChild(historyListContainer.lastChild);
+    }
     stack.push(newState);
     stackInd = stack.length - 1;
 
     updateUndoRedoBtn();
+
+    // Update History List
+    updateHistoryList(historyText);
 
     console.log("Saved. Total states:", stack.length, "Current Index:", stackInd);
 }
@@ -432,6 +512,8 @@ function undo() {
     if (stackInd > 0) {
         --stackInd;
         restoreState();
+        // Update active list item
+        changeActiveHistory(historyListContainer.children[stackInd]);
     }
 }
 
@@ -439,15 +521,19 @@ function redo() {
     if(stackInd < stack.length - 1) {
         ++stackInd;
         restoreState();
+        // Update active list item
+        changeActiveHistory(historyListContainer.children[stackInd]);
     }
 }
 
 function updateUndoRedoBtn() {
     console.log("Stack Index:", stackInd, "Stack Length:", stack.length);
-    if (stackInd > 0)
+    if (stackInd > 0) {
         undoBtn.classList.remove("disabled-button");
-    else
+    }
+    else {
         undoBtn.classList.add("disabled-button");
+    }
 
     if (stackInd < stack.length - 1)
         redoBtn.classList.remove("disabled-button");
@@ -455,7 +541,35 @@ function updateUndoRedoBtn() {
         redoBtn.classList.add("disabled-button");
 }
 
-slider.addEventListener("change", saveState);
+// History Button
+historyBtn.addEventListener("click", () => {
+    const historyContainer = document.querySelector(".history-container");
+    historyBtn.classList.toggle("active");
+
+    // Show History List + Hide Filters when active
+    if (historyBtn.classList.contains("active")) {
+        historyContainer.style.display = "block";
+        filtersHeading.textContent = "History";
+        filterOptions.style.display = "none";
+        sliderHeading.style.display = "none";
+        sliderValue.style.display = "none";
+        slider.style.display = "none";
+        rotateFlipHeading.style.display = "none";
+        rotateFlipElements.forEach(elem => elem.style.display = "none");
+    } 
+    else {
+        historyContainer.style.display = "none";
+        filtersHeading.textContent = "Filters";
+        filterOptions.style.display = "grid";
+        sliderHeading.style.display = "block";
+        sliderValue.style.display = "block";
+        slider.style.display = "block";
+        rotateFlipHeading.style.display = "block";
+        rotateFlipElements.forEach(elem => elem.style.display = "grid");
+    }
+})
+
+slider.addEventListener("change", () => saveState());
 </script>
 </body>
 </html>
