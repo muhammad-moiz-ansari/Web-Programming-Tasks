@@ -1,57 +1,494 @@
-chooseBtn = document.querySelector(".choose-btn");
-resetBtn = document.querySelector(".reset-btn");
-saveBtn = document.querySelector(".save-btn");
 
+// --- 1. GLOBAL VARIABLES ---
+const fileInput = document.getElementById("file-input");
+const chooseBtn = document.querySelector(".choose-btn");
 const canvas = document.getElementById("canvas-image");
-const context = canvas.getContext("2d");
-const fileInput = document.getElementById("file-input")
+const ctx = canvas.getContext("2d");
 
-let originalImage = new Image();
+const undoBtn = document.getElementById("undo-btn");
+const redoBtn = document.getElementById("redo-btn");
+const historyBtn = document.getElementById("history-btn");
+const historyList = document.querySelectorAll(".history-container li");
+const historyListContainer = document.querySelector(".history-container ul");
+let historyData = [];
 
-// Load default image
+// Filters Container Elements
+const filtersHeading = document.getElementById("filters-heading");
+const filterOptions = document.querySelector(".filter-options");
+const filterButtons = document.querySelectorAll(".filter-options button");
+const sliderHeading = document.getElementById("slider-heading");
+const sliderValue = document.getElementById("slider-percent");
+const slider = document.getElementById("slider");
+const rotateFlipHeading = document.getElementById("rotate-flip-heading");
+const rotateFlipElements = document.querySelectorAll(".rotate-flip");
+
+let filename = "edited-image.jpg";
+
+// Filter State Variables (Default Values)
+let currState = {
+    brightness: 100,
+    saturation: 100,
+    inversion: 0,
+    grayscale: 0,
+    sepia: 0,
+    blur: 0,
+    angle: 0, // For rotation
+    flipX: 1, // 1 for normal, -1 for flipped
+    flipY: 1 // 1 for normal, -1 for flipped
+};
+
+// For Undo/Redo
+let stack = [];
+let stackInd = -1;
+
+// Track which filter is currently selected
+let activeFilter = "Brightness"; 
+
+// The Image Object
+let originalImage = new Image(); 
+let isDefaultImage = true;
+
+// --- 2. INITIALIZATION ---
 window.onload = function() {
-    originalImage.src="default.png";
-    originalImage.cover = true;
-    originalImage.width = canvas.clientWidth;
-    originalImage.height = canvas.clientHeight;
     originalImage.onload = function() {
         canvas.width = originalImage.width;
         canvas.height = originalImage.height;
-        context.drawImage(originalImage, 0, 0, canvas.clientWidth, canvas.clientHeight);
-    }
+        ctx.drawImage(originalImage, 0, 0, originalImage.width, originalImage.height);
 
-    chooseBtn.addEventListener("click", () => {
-        fileInput.click();
-    });
+        // Reset values
+        stack = [];     
+        stackInd = -1;
+        if (!isDefaultImage) {
+            resetFilters(); 
+        }
+        isDefaultImage = false;
+    };
+    
+    // Load Default Image
+    originalImage.src = "default.png";
 
+    slider.value = currState.brightness;
+    sliderValue.textContent = slider.value + "%";
+    sliderHeading.textContent = activeFilter;
+    slider.max = "200";
+
+    // Button Click -> Opens File Dialog
+    chooseBtn.addEventListener("click", () => fileInput.click());
+
+    // Loads New Image
     fileInput.addEventListener("change", function() {
         const file = this.files[0];
         if (file) {
+            filename = file.name;
             const reader = new FileReader();
             reader.onload = function(event) {
-                originalImage.src = event.target.result;
-                
-            }
+                originalImage.src = event.target.result; 
+            };
             reader.readAsDataURL(file);
+
+            // Enable Editing
+            const disabled = document.querySelectorAll(".disabled-container");
+            disabled.forEach(dis_elem => {
+                dis_elem.classList.remove("disabled-container")
+            })
         }
     });
+};
+
+// --- 3. FILTER APPLICATION FUNCTION ---
+function applyFilters() {
+    // Clear Canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Save Context State
+    ctx.save();
+
+    // Move to Center for Rotation & Flipping
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+
+    // Apply Rotation
+    ctx.rotate((currState.angle * Math.PI) / 180);
+
+    // Apply Flipping
+    ctx.scale(currState.flipX, currState.flipY);
+
+    // Move Back
+    ctx.translate(-canvas.width / 2, -canvas.height / 2);
+
+    // Set Filter Styles
+    ctx.filter = `brightness(${currState.brightness}%)
+        saturate(${currState.saturation}%)
+        invert(${currState.inversion}%)
+        grayscale(${currState.grayscale}%)
+        sepia(${currState.sepia}%)
+        blur(${currState.blur}px)`;
+
+    // Draw Image with Filters
+    ctx.drawImage(originalImage, 0, 0, canvas.width, canvas.height);
+
+    // Restore Context State
+    ctx.restore();
 }
 
-// Select Image
-function selectImage() {
-    fileInput.addEventListener("change", function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                originalImage.src = reader.result;
-                originalImage.onload = function() {
-                    canvas.width = originalImage.width;
-                    canvas.height = originalImage.height;
-                    context.drawImage(originalImage, 0, 0, canvas.clientWidth, canvas.clientHeight);
-                }
-            }
-            reader.readAsDataURL(file);
+// --- 4. Update Filters ---
+slider.addEventListener("input", function() {
+    const value = this.value;
+    sliderValue.textContent = `${value}%`;
+
+    switch (activeFilter) {
+        case "Brightness":
+            currState.brightness = value;
+            sliderHeading.textContent = "Brightness";
+            break;
+        case "Saturation":
+            currState.saturation = value;
+            sliderHeading.textContent = "Saturation";
+            break;
+        case "Inversion":
+            currState.inversion = value;
+            sliderHeading.textContent = "Inversion";
+            break;
+        case "Grayscale":
+            currState.grayscale = value;
+            sliderHeading.textContent = "Grayscale";
+            break;
+        case "Rotate":
+            currState.angle = value;
+            sliderHeading.textContent = "Rotate";
+            sliderValue.textContent = `${value}°`;
+            break;
+        case "Sepia":
+            currState.sepia = value;
+            sliderHeading.textContent = "Sepia";
+            break;
+        case "Blur":
+            currState.blur = value;
+            sliderHeading.textContent = "Blur";
+            sliderValue.textContent = `${value}px`;
+            break;
+    }
+    applyFilters();
+});
+
+// --- 5. Filter Option Change ---
+const inactiveBtns = document.querySelectorAll(".options-btn-inactive");
+
+filterButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        let value;
+        const activeBtn = document.querySelector(".options-btn-active");
+        activeBtn.classList.remove("options-btn-active");
+        activeBtn.classList.add("options-btn-inactive");
+        const clickedName = btn.innerHTML;
+
+        btn.classList.remove("options-btn-inactive");
+        btn.classList.add("options-btn-active");
+
+        activeFilter = clickedName;
+        sliderHeading.textContent = clickedName;
+        slider.min = "0";
+        switch (activeFilter) {
+            case "Brightness":
+                value = currState.brightness;
+                slider.max = "200";
+                break;
+            case "Saturation":
+                value = currState.saturation;
+                slider.max = "200";
+                break;
+            case "Inversion":
+                value = currState.inversion;
+                slider.max = "100";
+                break;
+            case "Grayscale":
+                value = currState.grayscale;
+                slider.max = "100";
+                break;
+            case "Rotate":
+                value = currState.angle;
+                sliderValue.textContent = `${value}°`;
+                slider.min = "-360";
+                slider.max = "360";
+                break;
+            case "Sepia":
+                value = currState.sepia;
+                slider.max = "100";
+                break;
+            case "Blur":
+                value = currState.blur;
+                sliderValue.textContent = `${value}px`;
+                slider.max = "100";
+                break;
+            default:
+                slider.min = "0";
+                slider.max = "100";
         }
-    });
+        if (activeFilter != "Blur" && activeFilter != "Rotate")
+            sliderValue.textContent = `${value}%`;
+        slider.value = value;
+    })
+})
+
+// Rotate & Flip Button Functions
+function rotate_left() {
+    currState.angle = (currState.angle - 90) % 360;
+    if (activeFilter === "Rotate") {
+        slider.value = currState.angle;
+        sliderValue.textContent = `${currState.angle}°`;
+    }
+    applyFilters();
+    saveState("Rotated Left: +90°");
 }
+function rotate_right() {
+    currState.angle = (currState.angle + 90) % 360;
+    if (activeFilter === "Rotate") {
+        slider.value = currState.angle;
+        sliderValue.textContent = `${currState.angle}°`;
+    }
+    applyFilters();
+    saveState("Rotated Right: -90°");
+}
+function flip_horizontal() {
+    currState.flipX *= -1;
+    applyFilters();
+    saveState("Flipped Horizontally");
+}
+function flip_vertical() {
+    currState.flipY *= -1;
+    applyFilters();
+    saveState("Flipped Vertically");
+}
+
+function resetFilters() {
+    currState.brightness = 100;
+    currState.saturation = 100;
+    currState.inversion = 0;
+    currState.grayscale = 0;
+    currState.sepia = 0;
+    currState.blur = 0;
+    currState.angle = 0;
+    currState.flipX = 1;
+    currState.flipY = 1;
+
+    // Reset UI
+    const activeBtn = document.querySelector(".options-btn-active");
+    activeBtn.classList.remove("options-btn-active");
+    activeBtn.classList.add("options-btn-inactive");
+
+    const defaultBtn = document.querySelector(".filter-options button:first-child");
+    defaultBtn.classList.remove("options-btn-inactive");
+    defaultBtn.classList.add("options-btn-active");
+
+    activeFilter = "Brightness";
+    sliderHeading.textContent = "Brightness";
+    sliderValue.textContent = "100%";
+    slider.value = 100;
+    slider.max = "200";
+
+    applyFilters();
+    saveState("Reset Filters");
+}
+
+// download Image
+function saveImage() {
+    const link = document.createElement("a");
+
+    // Separate filename and extension
+    const lastDotIndex = filename.lastIndexOf(".");
+    let originalName = filename;
+    let ext = "jpg";
+    if (lastDotIndex !== -1) {
+        originalName = filename.substring(0, lastDotIndex);
+        ext = filename.substring(lastDotIndex + 1).toLowerCase();
+    }
+
+    link.download = `${originalName}-edited.${ext}`;
+
+    if (ext == "jpg" || ext == "jpeg")
+        url = "image/jpeg";
+    else
+        url = "image/png";
+    link.href = canvas.toDataURL(url, 1);
+    link.click();
+}
+
+function changeActiveHistory(listItem) {
+    const currSelected = document.querySelector(".history-container li.active");
+
+    if (currSelected)
+        currSelected.classList.remove("active");
+    
+    if (listItem)
+         listItem.classList.add("active");
+}
+
+function updateHistoryList(historyText) {
+    // Create list element
+    const historyItem = document.createElement("li");
+
+    // Set list text
+    let historyVal;
+    if (activeFilter === "Rotate")
+        historyVal = `${slider.value}°`;
+    else if (activeFilter === "Blur")
+        historyVal = `${slider.value}px`;
+    else
+        historyVal = `${slider.value}%`;
+
+    // List text
+    if (!historyText) {
+        historyText = `Edited ${activeFilter}: ${historyVal}`;
+    }
+
+    if (stackInd == 0)
+        historyItem.textContent = "Original Image";
+    else
+        historyItem.textContent = historyText;
+    
+    // Update active list item
+    changeActiveHistory(historyItem);
+
+    // Add its click event
+    historyItem.addEventListener("click", function() {
+        const itemsArray = Array.from(historyListContainer.children);
+        stackInd = itemsArray.indexOf(this);
+        
+        // Restore the image + Update active list item
+        restoreState();
+        changeActiveHistory(this);
+    });
+
+    // Append it to the HTML
+    historyListContainer.appendChild(historyItem);
+}
+
+// UNDO / REDO
+function saveState(historyText = "") {
+    let newState = {...currState};
+
+    
+    if (stackInd < stack.length - 1) {
+        stack.length = stackInd + 1;
+        while (historyListContainer.children.length > stackInd + 1)
+            historyListContainer.removeChild(historyListContainer.lastChild);
+    }
+    stack.push(newState);
+    stackInd = stack.length - 1;
+
+    updateUndoRedoBtn();
+
+    // Update History List
+    updateHistoryList(historyText);
+
+    console.log("Saved. Total states:", stack.length, "Current Index:", stackInd);
+}
+
+function restoreState() {
+    // Assign a copy of object
+    currState = {...stack[stackInd]};
+    
+    // Aply filters
+    applyFilters();
+
+    // Update UI
+    let val;
+    switch (activeFilter) {
+        case "Brightness": 
+            val = currState.brightness; 
+            break;
+        case "Saturation": 
+            val = currState.saturation; 
+            break;
+        case "Inversion": 
+            val = currState.inversion; 
+            break;
+        case "Grayscale": 
+            val = currState.grayscale; 
+            break;
+        case "Rotate": 
+            val = currState.angle; 
+            break;
+        case "Sepia": 
+            val = currState.sepia; 
+            break;
+        case "Blur": 
+            val = currState.blur; 
+            break;
+    }
+    
+    // Update slider position and text
+    slider.value = val;
+    
+    if (activeFilter === "Rotate")
+        sliderValue.textContent = `${val}°`;
+    else if (activeFilter === "Blur")
+        sliderValue.textContent = `${val}px`;
+    else
+        sliderValue.textContent = `${val}%`;
+
+    // Enable / Disable Buttons
+    updateUndoRedoBtn();
+}
+
+function undo() {
+    if (stackInd > 0) {
+        --stackInd;
+        restoreState();
+        // Update active list item
+        changeActiveHistory(historyListContainer.children[stackInd]);
+    }
+}
+
+function redo() {
+    if(stackInd < stack.length - 1) {
+        ++stackInd;
+        restoreState();
+        // Update active list item
+        changeActiveHistory(historyListContainer.children[stackInd]);
+    }
+}
+
+function updateUndoRedoBtn() {
+    console.log("Stack Index:", stackInd, "Stack Length:", stack.length);
+    if (stackInd > 0) {
+        undoBtn.classList.remove("disabled-button");
+    }
+    else {
+        undoBtn.classList.add("disabled-button");
+    }
+
+    if (stackInd < stack.length - 1)
+        redoBtn.classList.remove("disabled-button");
+    else
+        redoBtn.classList.add("disabled-button");
+}
+
+// History Button
+historyBtn.addEventListener("click", () => {
+    const historyContainer = document.querySelector(".history-container");
+    historyBtn.classList.toggle("active");
+
+    // Show History List + Hide Filters when active
+    if (historyBtn.classList.contains("active")) {
+        historyContainer.style.display = "block";
+        filtersHeading.textContent = "History";
+        filterOptions.style.display = "none";
+        sliderHeading.style.display = "none";
+        sliderValue.style.display = "none";
+        slider.style.display = "none";
+        rotateFlipHeading.style.display = "none";
+        rotateFlipElements.forEach(elem => elem.style.display = "none");
+    } 
+    else {
+        historyContainer.style.display = "none";
+        filtersHeading.textContent = "Filters";
+        filterOptions.style.display = "grid";
+        sliderHeading.style.display = "block";
+        sliderValue.style.display = "block";
+        slider.style.display = "block";
+        rotateFlipHeading.style.display = "block";
+        rotateFlipElements.forEach(elem => elem.style.display = "grid");
+    }
+})
+
+slider.addEventListener("change", () => saveState());
