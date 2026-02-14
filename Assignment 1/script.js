@@ -59,6 +59,7 @@ window.onload = function() {
         stack = [];     
         stackInd = -1;
         if (!isDefaultImage) {
+            resetHistory();
             resetFilters(); 
         }
         isDefaultImage = false;
@@ -287,6 +288,15 @@ function resetFilters() {
 
     applyFilters();
     saveState("Reset Filters");
+}
+
+function resetHistory() {
+    historyData = [];
+    stack = [];
+    stackInd = -1;
+    while (historyListContainer.firstChild) {
+        historyListContainer.removeChild(historyListContainer.firstChild);
+    }
 }
 
 // download Image
