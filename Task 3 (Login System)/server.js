@@ -41,7 +41,6 @@ app.post('/register', (req, res) => {
     if(!username || !password)
         return res.status(400).send('Username or password is missing!');
     res.json({message: 'User registered successfully', username});
-    res.send(`User Registered: ${username}, ${password}`);
 });
 
 app.get('/user/:id', (req, res) => {
@@ -50,13 +49,19 @@ app.get('/user/:id', (req, res) => {
     res.send(`User ID: ${id}`);
 });
 
+app.post('/login', (req, res) => {
+    const {username, password} = req.body;
+    res.json({message: "Login successful", username});
+});
+
 // Protected GET
 app.get('/dashboard', isLoggedIn, (req, res) => {
     res.send(`Welcome ${req.session.user.username} to the dashboard!`);
 });
 
 // Logout
-app.get('/logout', (res, req) => {
+app.post('/logout', (req, res) => {
+    req.session.destroy();
     res.send('Logout successful');
 });
 
