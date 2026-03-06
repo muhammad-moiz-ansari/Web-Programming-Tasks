@@ -36,8 +36,6 @@
         <div class="result-msg" id="reg-result"></div>
     </section>
 
-    
-
     <!-- LOGIN CARD -->
     <section class="form-card" id="login-card">
         <h2>Login</h2>
@@ -159,6 +157,32 @@
             showResult('logout-result', 'Could not reach server', 'error');
         }
     }
+
+    // Automatically check if user is logged in when page loads
+    window.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const res = await fetch('http://localhost:3000/check-auth', {
+                method: 'GET',
+                credentials: 'include' // This sends the invisible session cookie!
+            });
+            
+            if (res.ok) {
+                const data = await res.json();
+                if (data.loggedIn) {
+                    // Update the Nav Bar
+                    document.getElementById('nav-status').textContent = `Logged in as: ${data.username}`;
+                    
+                    // Bonus: Auto-fill the dashboard text too!
+                    const dashEl = document.getElementById('dash-result');
+                    dashEl.textContent = `Welcome ${data.username} to the dashboard!`;
+                    dashEl.style.opacity = '1';
+                }
+            }
+        } 
+        catch (error) {
+            console.log("User is not logged in or server is offline.");
+        }
+    });
 </script>
 
 </body>

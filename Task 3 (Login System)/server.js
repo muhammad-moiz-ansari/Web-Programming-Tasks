@@ -52,6 +52,9 @@ app.use(cors({
     credentials: true       // Allow cookies to be sent
 }));
 
+// Serve files from project folder
+app.use(express.static(__dirname)); 
+
 ////////////////////
 //                //
 //     ROUTES     //
@@ -98,6 +101,15 @@ app.post('/logout', (req, res) => {
     res.send('Logout successful');
 });
 
+// ────────────────────── CHECK AUTH STATUS ───────────────────────
+app.get('/check-auth', (req, res) => {
+    // If the session exists and has a user attached to it
+    if (req.session && req.session.user) {
+        res.json({ loggedIn: true, username: req.session.user.username });
+    } else {
+        res.status(401).json({ loggedIn: false });
+    }
+});
 
 // Start server on port 3000
 app.listen(3000, () => {
