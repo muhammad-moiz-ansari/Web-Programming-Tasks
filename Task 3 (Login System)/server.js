@@ -1,8 +1,13 @@
 // Import express
 const express = require('express');
+const connectDB = require('./db');
 
 // Create app
 const app = express();
+app.use(express.json());
+
+// Connect to MongoDB Database
+connectDB();
 
 // Telling express to understand data from requests
 // It runs on every request and converts JSON body into req.body
