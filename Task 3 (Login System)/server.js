@@ -1,6 +1,8 @@
 // Import express
 const express = require('express');
 const connectDB = require('./db');
+const UserModel = require('./UserModel');
+const session = require('express-session');
 
 // Create app
 const app = express();
@@ -41,22 +43,48 @@ app.get('/about', (req, res) => {
     res.send('About Page');
 });
 
-app.post('/register', (req, res) => {
+app.post('/register', async (req, res) => {
     const { username, password } = req.body;
-    if(!username || !password)
-        return res.status(400).send('Username or password is missing!');
-    res.json({message: 'User registered successfully', username});
+    try {
+        if(!username || !password)
+            return res.status(400).send('Username or password is missing!');
+
+        const existing = await UserModel.findOne({username});
+        if (existing) {
+            return res.status(400).send(`Username ${username} already exists.`);
+        }
+        const newUser = new UserModel({username, password});
+        await newUser.save();
+        res.json({message: 'User registered successfully', username});
+    } 
+    catch (error) {
+        res.status(500).send('Something went wrong');
+    }
+});
+
+app.post('/login', async (req, res) => {
+    const {username, password} = req.body;
+    try {
+        const exists = await UserModel.findOne({username})
+        if (!exists) {
+            return res.status(401).send(`Username ${username} doesn\'t exists.`);
+        }
+        const user = await UserModel.findOne({username, password});
+        if (!user) {
+            return res.status(401).send('Incorrect password');
+        }
+
+        res.json({message: "Login successful", username});
+    }
+    catch (error) {
+        res.status(500).send('Something went wrong');
+    }
 });
 
 app.get('/user/:id', (req, res) => {
     const id = req.params.id;
     // if URL is /user/42 → id = "42"
     res.send(`User ID: ${id}`);
-});
-
-app.post('/login', (req, res) => {
-    const {username, password} = req.body;
-    res.json({message: "Login successful", username});
 });
 
 // Protected GET

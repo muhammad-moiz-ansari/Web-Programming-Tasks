@@ -15,5 +15,6 @@ const userSchema = new mongoose.Schema({
 
 // Model = your interface to the "users" collection
 const UserModel = mongoose.model('User', userSchema);
+// It will automatically create collection named "users"
 
 module.exports = UserModel;
