@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Lato:wght@400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <span class="logo">AuthApp</span>
+    <span class="nav-status" id="nav-status">Not logged in</span>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+    <!-- REGISTER CARD -->
+    <section class="form-card">
+        <h2>Register</h2>
+        <div class="form-item">
+            <label for="reg-username">Username</label>
+            <input id="reg-username" type="text" placeholder="Enter username" />
+        </div>
+        <div class="form-item">
+            <label for="reg-password">Password</label>
+            <input id="reg-password" type="password" placeholder="Enter password" />
+        </div>
+        <button class="submit-btn" onclick="register()">Create Account</button>
+        <div class="divider" style="margin-top: 10px; margin-bottom: 10px;">
+            <span>Already have an account? <a href="#login-card" style="color: var(--primary-color); text-decoration: none; font-weight: 700;">Sign In</a></span>
+        </div>
+        <div class="result-msg" id="reg-result"></div>
+    </section>
+
+    
+
+    <!-- LOGIN CARD -->
+    <section class="form-card" id="login-card">
+        <h2>Login</h2>
+        <div class="form-item">
+            <label for="log-username">Username</label>
+            <input id="log-username" type="text" placeholder="Enter username" />
+        </div>
+        <div class="form-item">
+            <label for="log-password">Password</label>
+            <input id="log-password" type="password" placeholder="Enter password" />
+        </div>
+        <button class="submit-btn" onclick="login()">Sign In</button>
+        <div class="result-msg" id="log-result"></div>
+    </section>
+
+    <!-- DASHBOARD CARD -->
+    <section class="dashboard-card">
+        <h2>Dashboard</h2>
+        <p id="dash-result">Check if you are logged in</p>
+        <button class="outline-btn" onclick="dashboard()">Check Dashboard</button>
+    </section>
+
+    <!-- LOGOUT CARD -->
+    <section class="form-card" style="text-align:center;">
+        <h2>Logout</h2>
+        <button class="submit-btn" onclick="logout()">Sign Out</button>
+        <div class="result-msg" id="logout-result"></div>
+    </section>
+
+</main>
+
+<footer>
+    &copy; 2025 AuthApp — Login System Task
+</footer>
+
+<script>
+    function showResult(id, message, type) {
+        const el = document.getElementById(id);
+        el.textContent = message;
+        el.className = `result-msg ${type}`;
+    }
+
+    async function register() {
+        const username = document.getElementById('reg-username').value.trim();
+        const password = document.getElementById('reg-password').value.trim();
+
+        if (!username || !password) {
+            return showResult('reg-result', 'Please fill in both fields', 'error');
+        }
+
+        try {
+            const res = await fetch('http://localhost:3000/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ username, password })
+            });
+            const text = await res.text();
+            showResult('reg-result', text, res.ok ? 'success' : 'error');
+        } catch {
+            showResult('reg-result', 'Could not reach server', 'error');
+        }
+    }
+
+    async function login() {
+        const username = document.getElementById('log-username').value.trim();
+        const password = document.getElementById('log-password').value.trim();
+
+        if (!username || !password) {
+            return showResult('log-result', 'Please fill in both fields', 'error');
+        }
+
+        try {
+            const res = await fetch('http://localhost:3000/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ username, password })
+            });
+            const text = await res.text();
+            showResult('log-result', text, res.ok ? 'success' : 'error');
+
+            if (res.ok) {
+                document.getElementById('nav-status').textContent = `Logged in as: ${username}`;
+            }
+        } catch {
+            showResult('log-result', 'Could not reach server', 'error');
+        }
+    }
+
+    async function dashboard() {
+        try {
+            const res = await fetch('http://localhost:3000/dashboard', {
+                credentials: 'include'
+            });
+            const text = await res.text();
+            const el = document.getElementById('dash-result');
+            el.textContent = text;
+            el.style.opacity = '1';
+        } catch {
+            document.getElementById('dash-result').textContent = 'Could not reach server';
+        }
+    }
+
+    async function logout() {
+        try {
+            const res = await fetch('http://localhost:3000/logout', {
+                method: 'POST',
+                credentials: 'include'
+            });
+            const text = await res.text();
+            showResult('logout-result', text, res.ok ? 'info' : 'error');
+
+            if (res.ok) {
+                document.getElementById('nav-status').textContent = 'Not logged in';
+                document.getElementById('dash-result').textContent = 'Check if you are logged in';
+            }
+        } catch {
+            showResult('logout-result', 'Could not reach server', 'error');
+        }
+    }
+</script>
+
+</body>
+</html>

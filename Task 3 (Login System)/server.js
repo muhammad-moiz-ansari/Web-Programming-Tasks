@@ -3,6 +3,7 @@ const express = require('express');
 const connectDB = require('./db');
 const User = require('./User');
 const session = require('express-session');
+const cors = require('cors');
 require('dotenv').config();
 
 // Create app
@@ -46,16 +47,22 @@ function isLoggedIn(req, res, next) {
     }
 }
 
+app.use(cors({
+    origin: true,           // Allow requests all origins
+    credentials: true       // Allow cookies to be sent
+}));
+
 ////////////////////
 //                //
 //     ROUTES     //
 //                //
 ////////////////////
+// ──────────────────────── Home Page ─────────────────────────
 app.get('/', (req, res) => {
     res.send("Home Page");
 });
 
-// ──────────────────────── REGISTER ────────────────────────
+// ───────────────────────── REGISTER ─────────────────────────
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
     const user = new User(username, password);
@@ -66,7 +73,7 @@ app.post('/register', async (req, res) => {
         res.status(400).send(result.message);
 });
 
-// ───────────────────────── LOGIN ─────────────────────────
+// ────────────────────────── LOGIN ───────────────────────────
 app.post('/login', async (req, res) => {
     const {username, password} = req.body;
     const user = new User(username, password);
@@ -80,18 +87,12 @@ app.post('/login', async (req, res) => {
         res.status(401).send(result.message);
 });
 
-app.get('/user/:id', (req, res) => {
-    const id = req.params.id;
-    // if URL is /user/42 → id = "42"
-    res.send(`User ID: ${id}`);
-});
-
-// DASHBOARD (Protected)
+// ────────────────── DASHBOARD (Protected) ───────────────────
 app.get('/dashboard', isLoggedIn, (req, res) => {
     res.send(`Welcome ${req.session.user.username} to the dashboard!`);
 });
 
-// Logout
+// ────────────────────────── LOGOUT ──────────────────────────
 app.post('/logout', (req, res) => {
     req.session.destroy();
     res.send('Logout successful');
