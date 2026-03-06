@@ -3,19 +3,35 @@ const express = require('express');
 const connectDB = require('./db');
 const User = require('./User');
 const session = require('express-session');
+require('dotenv').config();
 
 // Create app
 const app = express();
-app.use(express.json());
 
-// Connect to MongoDB Database
-connectDB();
+connectDB();                // Connect to MongoDB Database
 
+///////////////////////////////////////////////
+//                                           //
+//     MIDDLEWARE (runs on every request)    //
+//                                           //
+///////////////////////////////////////////////
+
+// Parse JSON bodies
 // Telling express to understand data from requests
 // It runs on every request and converts JSON body into req.body
-app.use(express.json());
+app.use(express.json());    
 
-// Logger middleware (runs on every request)
+// User session setup
+app.use(session({
+    secret: process.env.SESSION_SECRET,    // Used to sign/encrypt the cookie
+    resave: false,                  // Dontt save session if unmodified
+    saveUninitialized: false,       // Don't create session until some data is stored
+    cookie: {
+        maxAge: 1000 * 60 * 60      // 1 hour (in ms)
+    }
+}))
+
+// Logger middleware 
 app.use((req, res, next) => {
     console.log(`${req.method} ${req.path}`);
     next();
@@ -39,10 +55,6 @@ app.get('/', (req, res) => {
     res.send("Home Page");
 });
 
-app.get('/about', (req, res) => {
-    res.send('About Page');
-});
-
 // ──────────────────────── REGISTER ────────────────────────
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
@@ -60,8 +72,10 @@ app.post('/login', async (req, res) => {
     const user = new User(username, password);
     const result = await user.login();
 
-    if(result.success)
+    if(result.success) {
+        req.session.user = { username: result.username };
         res.send(result.message);
+    }
     else
         res.status(401).send(result.message);
 });
@@ -72,7 +86,7 @@ app.get('/user/:id', (req, res) => {
     res.send(`User ID: ${id}`);
 });
 
-// Protected GET
+// DASHBOARD (Protected)
 app.get('/dashboard', isLoggedIn, (req, res) => {
     res.send(`Welcome ${req.session.user.username} to the dashboard!`);
 });
