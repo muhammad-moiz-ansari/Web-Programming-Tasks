@@ -1,7 +1,7 @@
 // Import express
 const express = require('express');
 const connectDB = require('./db');
-const UserModel = require('./UserModel');
+const User = require('./User');
 const session = require('express-session');
 
 // Create app
@@ -43,42 +43,27 @@ app.get('/about', (req, res) => {
     res.send('About Page');
 });
 
+// ──────────────────────── REGISTER ────────────────────────
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
-    try {
-        if(!username || !password)
-            return res.status(400).send('Username or password is missing!');
-
-        const existing = await UserModel.findOne({username});
-        if (existing) {
-            return res.status(400).send(`Username ${username} already exists.`);
-        }
-        const newUser = new UserModel({username, password});
-        await newUser.save();
-        res.json({message: 'User registered successfully', username});
-    } 
-    catch (error) {
-        res.status(500).send('Something went wrong');
-    }
+    const user = new User(username, password);
+    const result = await user.register();
+    if (result.success)
+        return res.send(result.message);
+    else
+        res.status(400).send(result.message);
 });
 
+// ───────────────────────── LOGIN ─────────────────────────
 app.post('/login', async (req, res) => {
     const {username, password} = req.body;
-    try {
-        const exists = await UserModel.findOne({username})
-        if (!exists) {
-            return res.status(401).send(`Username ${username} doesn\'t exists.`);
-        }
-        const user = await UserModel.findOne({username, password});
-        if (!user) {
-            return res.status(401).send('Incorrect password');
-        }
+    const user = new User(username, password);
+    const result = await user.login();
 
-        res.json({message: "Login successful", username});
-    }
-    catch (error) {
-        res.status(500).send('Something went wrong');
-    }
+    if(result.success)
+        res.send(result.message);
+    else
+        res.status(401).send(result.message);
 });
 
 app.get('/user/:id', (req, res) => {
