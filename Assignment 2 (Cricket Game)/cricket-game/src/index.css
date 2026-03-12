@@ -5,14 +5,16 @@
     --hover-color: rgb(153, 89, 49);
   }
 
-  body {
+  body, #root {
     margin: 0;
     height: 100vh;  /* Height fixed to browser window */
     background: rgba(0, 0, 0);
     font-family: 'Cinzel', serif;
     user-select: none;
+    
     display: flex;
     justify-content: center;
+    align-items: center;
     overflow: hidden;
   }
 
