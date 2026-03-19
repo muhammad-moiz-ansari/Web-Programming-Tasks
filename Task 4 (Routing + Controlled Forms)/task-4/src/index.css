@@ -325,7 +325,7 @@ footer {
 }
 
 /* sign in section */
-#signin-section, #signup-section, #feedback-section {
+#signin-section, #signup-section, #contact-section {
     display: flex;
     justify-content: center;
     align-items: center;
