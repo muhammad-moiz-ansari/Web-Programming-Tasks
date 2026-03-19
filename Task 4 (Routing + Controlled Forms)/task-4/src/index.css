@@ -45,14 +45,14 @@ h3 {
     color: var(--dark-color);
 }
 
-h1, h2 {
+h1, h2, h3 {
     font-family: 'Abril Fatface', cursive; 
     letter-spacing: 2px;
     font-weight: 400;
     text-align: center;
 }
 
-label, p, a, input, textarea, button {
+label, p, a, input, textarea, button, li {
     font-family: 'Lato', sans-serif;
     font-size: 17px;
 }
