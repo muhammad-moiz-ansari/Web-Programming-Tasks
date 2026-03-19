@@ -1,0 +1,38 @@
+Here are **Wild Pets** (exotic pets) you should include for your category:
+
+## **Reptiles** (6-8 pets)
+1. **Ball Python** - $250-400
+2. **Bearded Dragon** - $150-300
+3. **Leopard Gecko** - $80-200
+4. **Red-Eared Slider Turtle** - $50-150
+5. **Corn Snake** - $100-250
+6. **Crested Gecko** - $120-300
+7. **Russian Tortoise** - $200-400
+8. **Blue-Tongued Skink** - $300-500
+
+## **Small Exotic Mammals** (5-6 pets)
+1. **African Pygmy Hedgehog** - $200-350
+2. **Sugar Glider** - $300-500
+3. **Ferret** - $150-300
+4. **Chinchilla** - $200-400
+5. **Degus** - $100-200
+6. **Flying Squirrel** - $400-600
+
+## **Amphibians** (3-4 pets)
+1. **Pacman Frog** - $50-100
+2. **Fire-Bellied Toad** - $30-80
+3. **Axolotl** - $60-150
+4. **Tree Frog (White's)** - $70-120
+
+## **Invertebrates** (3-4 pets)
+1. **Chilean Rose Tarantula** - $40-100
+2. **Emperor Scorpion** - $30-60
+3. **Madagascar Hissing Cockroach** - $10-25
+4. **Hermit Crab** - $15-40
+
+## **Recommended Selection for Your Project:**
+I'd suggest picking **12-15 total** from the list above with variety:
+- 5 Reptiles (most popular exotic category)
+- 4 Small Mammals
+- 2 Amphibians
+- 2 Invertebrates (for the adventurous!)
