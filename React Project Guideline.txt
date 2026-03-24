@@ -1,0 +1,9 @@
+# Create the Vite Project
+npm create vite@latest project-name -- --template react
+
+# After done, run these on by one
+cd project-name
+npm install
+
+# Run this to run the project
+npm run dev
