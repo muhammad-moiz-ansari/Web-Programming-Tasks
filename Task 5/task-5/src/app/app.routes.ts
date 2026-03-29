@@ -1,9 +1,9 @@
 import { RouterModule, Routes } from '@angular/router';
 
-import { HomeComponent } from './home/home.componenet'
-import { AboutComponent } from './about/about.component'
-import { ContactComponent } from './contact/contact.component'
-import { FeedbackComponent } from './feedback/feedback.component';
+import { Navbar } from './navbar/navbar';
+import { Home } from './home/home'
+import { About } from './about/about'
+import { Login } from './login/login'
 import { NgModule } from '@angular/core';
 
 export const routes: Routes = [
@@ -11,10 +11,10 @@ export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
 
     // Component routes
-    {path: 'home', component: HomeComponent},
-    {path: 'about', component: AboutComponent},
-    {path: 'contact', component: ContactComponent},
-    {path: 'feedback', component: FeedbackComponent},
+    {path: 'navbar', component: Navbar},
+    {path: 'home', component: Home},
+    {path: 'about', component: About},
+    {path: 'login', component: Login},
 
     // wildcard route for 404 not found page
     {path: '**', redirectTo: 'home'}

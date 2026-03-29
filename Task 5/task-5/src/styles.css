@@ -1,1 +1,274 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    --dark-color: #1a0f00;
+    --primary-color: #ff9505;
+    --secondary-color: #ffb143;
+    --text-color: #ffffff;
+    --cream-color: #fff9f0;
+    --dark-cream: #f5e6d3;
+    --light-cream: #fffdf9;
+    --medium-bg: #2a1f00;
+    --hover-color: #e67e00;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+section {
+    scroll-margin-top: 80px;
+}
+
+body {
+    background-color: var(--dark-cream);
+    color: var(--dark-color);
+    overflow-x: hidden;
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h1, h2, h3, p {
+    margin-left: 10px;
+}
+h1 {
+    color: var(--primary-color);
+}
+h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1.4rem;
+    color: var(--dark-color);
+}
+h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    color: var(--dark-color);
+}
+
+h1, h2, h3 {
+    font-family: 'Abril Fatface', cursive; 
+    letter-spacing: 2px;
+    font-weight: 400;
+    text-align: center;
+}
+
+label, p, a, input, textarea, button, li {
+    font-family: 'Lato', sans-serif;
+    font-size: 17px;
+}
+
+p {
+    font-size: 1.05rem;
+    line-height: 1.5;
+}
+
+/* Home Section */
+#home {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 0 5%;
+}    
+
+.home-text {
+    flex: 1;
+    max-width: 600px;
+    text-align: left;
+}    
+.home-text h1 {
+    font-size: 2.8rem;
+    margin-bottom: 0.5rem;
+    text-align: left;
+}    
+
+.login-form button:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-3px);
+    box-shadow: 0 3px 5px 2px #2a1f003a;
+    cursor: pointer;
+}    
+
+.home-image {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}    
+.home-image img {
+    width: 100%;
+    max-width: 500px;
+    border: 9px solid rgba(251, 251, 251, 0.848);
+    border-radius: 50px 5px;
+    box-shadow: 0 0 7px 1px #2a1f0053;
+}
+.home-image img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 7px 3.5px #2a1f0053;
+    transition: all 0.3s ease;
+}
+
+/* About Section */
+#about {
+    padding: 40px 10%;
+    text-align: center;
+}
+
+/* Navigation Bar */
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0px;
+    padding: 15px;
+    background-color: var(--primary-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 12px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: var(--cream-color);
+    font-weight: 550;
+    font-size: 17px;
+    transition: all 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: var(--dark-color);
+}
+
+.nav-links li a:active {
+    color: #ffe0b2;
+}
+
+.logo {
+    font-family: pacifico, cursive;
+    padding: 0px;
+    margin: 0px;
+    font-size: 30px;
+    font-weight: 400;
+    color: var(--cream-color);
+    cursor: default;
+}
+
+/* Forms */
+
+.login-form input, .login-form textarea, .login-form button {
+    background-color: var(--light-cream);
+    color: var(--dark-color);
+    width: 100%;
+    padding: 8px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 16px;
+    margin-top: 5px;
+    transition: border 0.5s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-item input:focus, .login-item textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 5px var(--primary-color);
+}
+
+.login-form textarea {
+    resize: vertical;
+    min-height: 62px;
+}
+
+::placeholder {
+    color: #8b7355d7;
+    font-style: italic;
+}
+
+.login-form button {
+    background-color: var(--primary-color);
+    color: var(--cream-color);
+    border-style: none;
+    transition: all 0.3s ease;
+}
+
+/* Login Section */
+#login-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: var(--light-cream);
+}
+
+#form-container {
+    width: 500px;
+    padding: 20px;
+    margin: 20px;
+    background-color: var(--cream-color);
+    border-radius: 8px;
+    max-width: 612px;
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 4px 12px rgba(255, 151, 5, 0.399);
+}
+
+.login-form {
+    margin: 10px;
+    padding: 12px;
+}
+
+section:nth-child(even) {
+    background-color: var(--dark-cream);
+}
+
+/* Responsive Design */
+@media only screen and (max-width: 748px) {
+    #home h1 {
+        text-align: center;
+    }
+    #home {
+        flex-direction: column;
+        text-align: center;
+    }
+    .home-text {
+        text-align: center;
+    }
+    .home-image {
+        margin: 20px 0px 10% 0px;
+    }
+}
+
+@media only screen and (max-width: 664px) {
+    .nav-links {
+        gap: 10px;
+        margin: 15px 0px 4px 0px;
+    }
+    nav {
+        flex-direction: column;
+    }
+    section {
+        scroll-margin-top: 115px;
+    }
+    .home-image {
+        padding: 0 20px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+    section {
+        scroll-margin-top: 150px;
+    }
+}

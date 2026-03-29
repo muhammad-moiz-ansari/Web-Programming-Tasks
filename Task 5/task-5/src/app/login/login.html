@@ -1,0 +1,37 @@
+<section id="login-section">
+    <section id="form-container">
+        <h2>Login</h2>
+        <div class="login-form">
+            <form (ngSubmit)="onSubmit()">
+                <div class="login-item">
+                    <label>
+                        User Name:
+                        <input 
+                            type="text" 
+                            name="username" 
+                            placeholder="Your User Name" 
+                            required 
+                            [(ngModel)]="formData.username"
+                        /><br /><br />
+                    </label>
+                </div>
+                <div class="login-item">
+                    <label>
+                        Password:
+                        <input 
+                            type="password" 
+                            name="password" 
+                            placeholder="e.g. ********" 
+                            required 
+                            [(ngModel)]="formData.password"
+                        /><br /><br />
+                    </label>
+                </div>
+                <br />
+                <div class="login-item">
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</section>
