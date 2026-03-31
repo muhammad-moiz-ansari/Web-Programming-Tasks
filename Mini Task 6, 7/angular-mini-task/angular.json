@@ -3,11 +3,11 @@
   "version": 1,
   "cli": {
     "packageManager": "npm",
-    "analytics": "0cee4f72-6613-4c13-9037-9cf49373f365"
+    "analytics": false
   },
   "newProjectRoot": "projects",
   "projects": {
-    "my-angular-app": {
+    "angular-mini-task": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -57,10 +57,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "my-angular-app:build:production"
+              "buildTarget": "angular-mini-task:build:production"
             },
             "development": {
-              "buildTarget": "my-angular-app:build:development"
+              "buildTarget": "angular-mini-task:build:development"
             }
           },
           "defaultConfiguration": "development"

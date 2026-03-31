@@ -1,0 +1,82 @@
+/* --- COLOR PALETTE --- */
+:root {
+    --dark-color: #1a0f00;
+    --primary-color: #ff9505;
+    --cream-color: #fff9f0;
+    --hover-color: #e67e00;
+}
+
+/* --- PARENT HEADING --- */
+h2 {
+    font-family: 'Abril Fatface', cursive; 
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* --- THE CHILD CARD --- */
+/* This turns the <app-child> tag into a clean, simple card */
+app-child {
+    display: block; 
+    background-color: white;
+    border: 1px solid #ed9c3f; /* Very subtle light border */
+    border-radius: 10px;
+    padding: 25px;
+    margin: 20px auto;
+    max-width: 320px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04); /* Soft, barely-there shadow */
+}
+
+/* --- CHILD CONTENTS --- */
+app-child h3 {
+    font-family: 'Abril Fatface', cursive; 
+    color: var(--dark-color);
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+}
+
+app-child p {
+    font-family: 'Lato', sans-serif;
+    color: #4a4a4a; /* Softer grey for readable text */
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+app-child button {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+app-child button:hover {
+    background-color: var(--hover-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Message Box */
+.message-box {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+    font-family: 'Lato', sans-serif;
+    color: #333;
+    width: 20%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    text-align: center;
+    transition: all 0.3s ease;
+}

@@ -1,0 +1,17 @@
+<div class="parent-card">
+    <h2>Parent Component</h2>
+
+    <div class="children-container">
+        <!-- Sending string -->
+        <app-child [data]="message"></app-child>
+
+        <!-- Sending object -->
+        <app-child [data]="student"></app-child>
+
+        <!-- Receiving message -->
+        <app-child (messageEvent)="getMessage($event)" [showButton]="true"></app-child>
+        <div class="message-box" *ngIf="receivedMessage">
+            <strong>Message from Child:</strong> {{ receivedMessage }}
+        </div>
+    </div>
+</div>

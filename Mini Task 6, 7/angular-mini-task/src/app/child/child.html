@@ -1,0 +1,17 @@
+<div class="child-card">
+    <h3>Child Component</h3>
+
+    <!-- Display String -->
+    <p *ngIf="data && data.name === undefined">
+        <strong>Message:</strong> {{ data }}
+    </p>
+
+    <!-- Display Object -->
+    <p *ngIf="data && data.name">
+        <strong>Name:</strong> {{ data.name }} <br>
+        <strong>Roll No:</strong> {{ data.rollNo }}
+    </p>
+
+    <!-- Message Event -->
+    <button (click)="sendMessage()" *ngIf="showButton">Send Message</button>
+</div>
