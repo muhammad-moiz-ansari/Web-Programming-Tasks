@@ -1,0 +1,109 @@
+You are an Expert Full-Stack Developer. Your task is to build a complete, production-ready Next.js App Router application in a single execution. Do not use placeholders; provide the full functional code for every file.
+
+### TECH STACK
+- Next.js 14+ (App Router)
+- Tailwind CSS
+- MongoDB (via Mongoose)
+- NextAuth.js (Credentials Provider)
+- Recharts (for simple dashboard charts)
+- Zod (for form validation)
+
+### PROJECT DIRECTORY STRUCTURE
+```text
+crm-auth-system/
+├── .env.example
+├── next.config.mjs
+├── package.json
+├── Dependencies.txt
+├── postcss.config.mjs
+├── tailwind.config.js
+└── src/
+    ├── app/
+    │   ├── (auth)/
+    │   │   ├── login/page.jsx
+    │   │   └── signup/page.jsx
+    │   ├── (dashboard)/
+    │   │   ├── admin/page.jsx
+    │   │   ├── agent/page.jsx
+    │   │   └── layout.jsx
+    │   ├── api/
+    │   │   ├── analytics/route.js
+    │   │   └── auth/
+    │   │       ├── [...nextauth]/route.js
+    │   │       └── signup/route.js
+    │   ├── globals.css
+    │   ├── layout.jsx
+    │   └── page.jsx
+    ├── components/
+    │   ├── dashboard/
+    │   │   ├── Sidebar.jsx
+    │   │   ├── StatsCard.jsx
+    │   │   ├── Topbar.jsx
+    │   │   └── SimpleChart.jsx
+    │   ├── providers/SessionProvider.jsx
+    │   └── ui/
+    │       ├── Button.jsx
+    │       └── FormField.jsx
+    ├── lib/
+    │   ├── auth.js
+    │   ├── db.js
+    │   └── validation.js
+    ├── middleware.js
+    └── models/User.js
+CORE BUSINESS LOGIC & FILE REQUIREMENTS
+1. Database & Models (lib/db.js, models/User.js)
+
+Implement a robust Mongoose connection in db.js that handles caching for serverless environments.
+
+User.js schema must include: name, email, password (hashed), and role (enum: ['ADMIN', 'AGENT'], default: 'AGENT').
+
+2. Authentication (lib/auth.js, api/auth/[...nextauth]/route.js, api/auth/signup/route.js)
+
+Configure NextAuth with a Credentials provider.
+
+In lib/auth.js, ensure the jwt callback attaches the user's role to the token, and the session callback passes that role to the client session.
+
+The signup/route.js must validate input, hash the password using bcryptjs, and save to MongoDB.
+
+3. Security Gatekeeper (middleware.js)
+
+Implement strict Next.js middleware using next-auth/middleware.
+
+RULES:
+
+Unauthenticated users trying to access /admin or /agent redirect to /login.
+
+Authenticated users trying to access /login or /signup redirect to their respective dashboard (/admin or /agent).
+
+Users with role 'AGENT' trying to access /admin must be redirected to /agent.
+
+Users with role 'ADMIN' trying to access /agent must be redirected to /admin.
+
+Apply the middleware matcher strictly to /admin/:path*, /agent/:path*, /login, and /signup.
+
+4. UI & Dashboards (app/(dashboard)/..., components/...)
+
+app/layout.jsx must wrap the app in the SessionProvider.
+
+(dashboard)/layout.jsx must include the Sidebar and Topbar. Extract the user session to display their name/role in the Topbar.
+
+The admin/page.jsx should display StatsCards and a SimpleChart using Recharts fetching data from api/analytics/route.js.
+
+The agent/page.jsx should display a simplified view.
+
+Make components in components/ui/ highly reusable with Tailwind variants.
+
+EXECUTION INSTRUCTIONS
+Initialize the package.json with all necessary dependencies.
+
+Generate all configuration files (tailwind.config.js, .env.example, etc.).
+
+Generate every JavaScript/JSX file in the src/ directory with fully implemented logic, proper imports, and styled with Tailwind CSS.
+
+Ensure there are no circular dependencies and all relative imports are correct.
+
+Begin generating the codebase now.
+
+----------------
+Add the following in Dependencies.txt as well
+npm install mongoose next-auth bcryptjs socket.io-client recharts rate-limiter-flexible zod tailwindcss postcss autoprefixer dotenv next-auth@beta 
